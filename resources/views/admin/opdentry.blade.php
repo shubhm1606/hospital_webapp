@@ -201,7 +201,7 @@
             </div>
         </div>
         </div>
-        <script src="http://localhost/hospital/public/js/formsubmit.js"></script>
+        <script src="{{asset('/public/js/formsubmit.js')}}"></script>
     </section>
 
 </main><!-- End #main -->

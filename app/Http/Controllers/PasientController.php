@@ -433,7 +433,7 @@ class PasientController extends Controller
     {
         // Example: ID से details fetch
         $details = pasient_details::where('opdId', $id)->first();
-
+        // dd( $details);
         return view('admin.from', compact('details'));
     }
     

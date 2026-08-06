@@ -1,135 +1,207 @@
+// Helper function to safely set error messages
+function setErrorMessage(className, message, color = 'red') {
+    const elements = document.getElementsByClassName(className);
+    if (elements && elements.length > 0) {
+        const element = elements[0];
+        element.innerHTML = message;
+        if (message) {
+            element.style.color = color;
+        }
+    }
+}
+
+// Helper function to safely get element value
+function getElementValue(elementId) {
+    const element = document.getElementById(elementId);
+    return element ? element.value : '';
+}
+
+// Helper function to safely set element value
+function setElementValue(elementId, value) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.value = value;
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+    // Initialize functions
     getOpdnumber();
     tuster();
    
+    // Disable PDF button initially
+    const pdfButton = document.getElementById("pdfButton");
+    if (pdfButton) {
+        pdfButton.disabled = true;
+    }
 
-    document.getElementById("pdfButton").disabled = true;
+    // Form submission handler
+    const submitForm = document.getElementById("submitdata");
+    if (submitForm) {
+        submitForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            
+            // Get form values safely
+            let name = getElementValue("patient_name");
+            let gender = getElementValue("gender");
+            let age = getElementValue("age");
+            let disease = getElementValue("disease");
+            let chargeType = getElementValue("charges");
+            let emergency = getElementValue("emergency");
+            let checkdetails = true;
 
-    document.getElementById("submitdata").addEventListener("submit", function (e) {
-        e.preventDefault();
-        let name = document.getElementById("patient_name").value;
-        let gender = document.getElementById("gender").value;
-        let age = document.getElementById("age").value;
-        let disease = document.getElementById("disease").value;
-        let chargeType = document.getElementById("charges").value;
-        let chargesAmount = document.getElementById("charge_amount").value;
-        let emergency = document.getElementById("emergency").value;
-        let checkdetails = true;
+            // Validate Name
+            if (name === '') {
+                checkdetails = false;
+                setErrorMessage('nameErr', 'Please Fill This Field');
+            } else {
+                setErrorMessage('nameErr', '');
+            }   
 
-        if (name === '') {
-            checkdetails = false;
-            let nameErr = document.getElementsByClassName('nameErr')[0];
-            nameErr.innerHTML = 'Please Fill This Field';
-            nameErr.style.color = 'red';
-        }else{
-            let nameErr = document.getElementsByClassName('nameErr')[0];
-            nameErr.innerHTML = '';
-        }   
-
-        if (gender === '') {
-            checkdetails = false;
-            let genderErr = document.getElementsByClassName('genderErr')[0];
-            genderErr.innerHTML = 'Please Select This Field';
-            genderErr.style.color = 'red';
-        }else{
-            let genderErr = document.getElementsByClassName('genderErr')[0];
-            genderErr.innerHTML = '';
-        }
-
-        if (age === '') {
-            checkdetails = false;
-            let ageErr = document.getElementsByClassName('ageErr')[0];
-            ageErr.innerHTML = 'Please Select This Field';
-            ageErr.style.color = 'red';
-        }else{
-            let ageErr = document.getElementsByClassName('ageErr')[0];
-            ageErr.innerHTML = '';
-        }
-
-        if (disease === '') {
-            checkdetails = false;
-            let diseaseErr = document.getElementsByClassName('diseaseErr')[0];
-            diseaseErr.innerHTML = 'Please Select This Field';
-            diseaseErr.style.color = 'red';
-        }else{
-            let diseaseErr = document.getElementsByClassName('diseaseErr')[0];
-            diseaseErr.innerHTML = '';
-        }
-
-        if (chargeType === '') {
-            checkdetails = false;
-            let chargeErr = document.getElementsByClassName('chargetypeErr')[0];
-            chargeErr.innerHTML = 'Please Select This Field';
-            chargeErr.style.color = 'red';
-        }else{
-            let chargeErr = document.getElementsByClassName('chargetypeErr')[0];
-            chargeErr.innerHTML = '';
-        }
-
-        if (checkdetails) {
-            showLoader();
-            let formData = new FormData(this);
-            formData.append("serialnumber", document.getElementById("sr_no").value);
-            formData.append("opd_id", document.getElementById("opd_id").value);
-            formData.append("date", document.getElementById("date").value);
-            formData.append("time", document.getElementById("time").value);
-            if(emergency == 'yes'){
-                formData.append("tags",'emergency');
-            }else{
-                formData.append("tags",'general');
+            // Validate Gender
+            if (gender === '') {
+                checkdetails = false;
+                setErrorMessage('genderErr', 'Please Select This Field');
+            } else {
+                setErrorMessage('genderErr', '');
             }
 
-            formData.append("charge_amount", document.getElementById("charge_amount").value);
-            // console.log('from',formData);return;
-            fetch("http://localhost/laravel_setup/fromsubmit", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                },
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    toastr.success("Details submit Successfully");
+            // Validate Age
+            if (age === '') {
+                checkdetails = false;
+                setErrorMessage('ageErr', 'Please Select This Field');
+            } else {
+                setErrorMessage('ageErr', '');
+            }
 
-                    document.getElementById("pdfButton").disabled = false;
-                    hideLoader();
+            // Validate Disease
+            if (disease === '') {
+                checkdetails = false;
+                setErrorMessage('diseaseErr', 'Please Select This Field');
+            } else {
+                setErrorMessage('diseaseErr', '');
+            }
+
+            // Validate Charge Type
+            if (chargeType === '') {
+                checkdetails = false;
+                setErrorMessage('chargetypeErr', 'Please Select This Field');
+            } else {
+                setErrorMessage('chargetypeErr', '');
+            }
+
+            // If all validations pass
+            if (checkdetails) {
+                showLoader();
+                let formData = new FormData(this);
+                
+                // Append all form data safely
+                const srNo = document.getElementById("sr_no");
+                const opdId = document.getElementById("opd_id");
+                const date = document.getElementById("date");
+                const time = document.getElementById("time");
+                const chargeAmount = document.getElementById("charge_amount");
+                
+                if (srNo) formData.append("serialnumber", srNo.value);
+                if (opdId) formData.append("opd_id", opdId.value);
+                if (date) formData.append("date", date.value);
+                if (time) formData.append("time", time.value);
+                if (chargeAmount) formData.append("charge_amount", chargeAmount.value);
+                
+                if (emergency == 'yes') {
+                    formData.append("tags", 'emergency');
                 } else {
-                    toastr.error("Error: " + data.message);
+                    formData.append("tags", 'general');
                 }
-            })
-            .catch(error => console.error("Error:", error));
-        }
-    });
 
-    document.getElementById('charges').addEventListener('change', function () {
-        chagersupdate(this.value);
-    });
+                // Get CSRF token safely
+                const csrfToken = document.querySelector('meta[name="csrf-token"]');
+                const headers = {};
+                if (csrfToken) {
+                    headers["X-CSRF-TOKEN"] = csrfToken.getAttribute("content");
+                }
 
-    document.getElementById('pdfButton').addEventListener('click', function () {
-        showLoader();
-        var pdfFrame = document.getElementById('pdfFrame');
-        pdfFrame.src = "http://localhost/laravel_setup/pdfdownloade";
-        pdfFrame.onload = function () {
-            pdfFrame.contentWindow.print();
-            // setTimeout(function () {
-            //     window.location.reload();
-            // }, 500);
-            toastr.success("Pdf Print Successfully");
-            hideLoader();
-        };
-    });
+                // Submit form data
+                fetch("http://localhost/laravel_setup/fromsubmit", {
+                    method: "POST",
+                    headers: headers,
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status) {
+                        if (typeof toastr !== 'undefined') {
+                            toastr.success("Details submit Successfully");
+                        }
+                        if (pdfButton) {
+                            pdfButton.disabled = false;
+                        }
+                        hideLoader();
+                    } else {
+                        if (typeof toastr !== 'undefined') {
+                            toastr.error("Error: " + data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error("Submission failed. Please try again.");
+                    }
+                    hideLoader();
+                });
+            }
+        });
+    }
 
-    document.getElementById("newEntery").addEventListener("click", function() {
-        location.reload(); 
-    });
+    // Charges dropdown change handler
+    const chargesSelect = document.getElementById('charges');
+    if (chargesSelect) {
+        chargesSelect.addEventListener('change', function () {
+            chagersupdate(this.value);
+        });
+    }
+
+    // PDF Button click handler
+    const pdfButtonClick = document.getElementById('pdfButton');
+    if (pdfButtonClick) {
+        pdfButtonClick.addEventListener('click', function () {
+            showLoader();
+            var pdfFrame = document.getElementById('pdfFrame');
+            if (pdfFrame) {
+                pdfFrame.src = "http://localhost/laravel_setup/pdfdownloade";
+                pdfFrame.onload = function () {
+                    pdfFrame.contentWindow.print();
+                    if (typeof toastr !== 'undefined') {
+                        toastr.success("Pdf Print Successfully");
+                    }
+                    hideLoader();
+                };
+                pdfFrame.onerror = function () {
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error("Failed to load PDF");
+                    }
+                    hideLoader();
+                };
+            } else {
+                hideLoader();
+                if (typeof toastr !== 'undefined') {
+                    toastr.error("PDF frame not found");
+                }
+            }
+        });
+    }
+
+    // New Entry button handler
+    const newEntryBtn = document.getElementById("newEntery");
+    if (newEntryBtn) {
+        newEntryBtn.addEventListener("click", function() {
+            location.reload(); 
+        });
+    }
 });
 
-
-
-
-
+// Function to get OPD number
 function getOpdnumber() {
     showLoader();
     fetch("http://localhost/laravel_setup/Opdnumber", {
@@ -138,72 +210,84 @@ function getOpdnumber() {
     .then(response => response.json())
     .then(data => {
         if (data.status) {
-            document.getElementById('sr_no').value = data.data.serialnumber;
-            document.getElementById('opd_id').value = data.data.opdnumber;
-            document.getElementById('date').value = data.data.date;
-            document.getElementById('time').value = data.data.time;
+            setElementValue('sr_no', data.data.serialnumber);
+            setElementValue('opd_id', data.data.opdnumber);
+            setElementValue('date', data.data.date);
+            setElementValue('time', data.data.time);
             hideLoader();
         } else {
-            toastr.error("Error: " + data.message);
+            if (typeof toastr !== 'undefined') {
+                toastr.error("Error: " + data.message);
+            }
+            hideLoader();
         }
     })
-    .catch(error => console.error("Fetch Error:", error));
+    .catch(error => {
+        console.error("Fetch Error:", error);
+        if (typeof toastr !== 'undefined') {
+            toastr.error("Failed to fetch OPD number");
+        }
+        hideLoader();
+    });
 }
 
+// Function to update charges
 function chagersupdate(chargeType) {
     if (chargeType === 'PAID') {
         let container = document.getElementById("freeoption");
-        container.innerHTML = "";
+        if (container) {
+            container.innerHTML = "";
+        }
         emergency().then(emergencyValue => {
             console.log("Emergency Value:", emergencyValue);
-            if(emergencyValue == 'yes'){
-                document.getElementById('charge_amount').value = 30.00;
-            }else{
-                document.getElementById('charge_amount').value = 10.00;
+            if (emergencyValue == 'yes') {
+                setElementValue('charge_amount', '30.00');
+            } else {
+                setElementValue('charge_amount', '10.00');
             }
         });
     } else if (chargeType === 'FREE') {
         emergency().then(emergencyValue => {
             console.log("Emergency Value:", emergencyValue);
-            if(emergencyValue == 'no'){
-                document.getElementById('charge_amount').value = 0;
-            }else{
-                document.getElementById('charge_amount').value = 0;
-            }
+            setElementValue('charge_amount', '0');
         });
+        
         let container = document.getElementById("freeoption");
-        container.innerHTML = "";
+        if (container) {
+            container.innerHTML = "";
 
-        let newSelect = document.createElement("select");
-        newSelect.name = "free_option";
-        newSelect.id = "free_option";
-        newSelect.className = "form-control";
-        
-        let option1 = new Option("Aayushman Card","aayushmaan");
-        let option2 = new Option("100 Dial","100_dial");
-        let option3 = new Option("Janani Express","janani_express");
-        let option4 = new Option("Staff","staff");
-        
-        newSelect.appendChild(option1);
-        newSelect.appendChild(option2);
-        newSelect.appendChild(option3);
-        newSelect.appendChild(option4);
+            let newSelect = document.createElement("select");
+            newSelect.name = "free_option";
+            newSelect.id = "free_option";
+            newSelect.className = "form-control";
+            
+            let option1 = new Option("Aayushman Card", "aayushmaan");
+            let option2 = new Option("100 Dial", "100_dial");
+            let option3 = new Option("Janani Express", "janani_express");
+            let option4 = new Option("Staff", "staff");
+            
+            newSelect.appendChild(option1);
+            newSelect.appendChild(option2);
+            newSelect.appendChild(option3);
+            newSelect.appendChild(option4);
 
-        let label = document.createElement("label");
-        label.innerText = "Option:";
-        
-        let div = document.createElement("div");
-        div.className = "form-group";
-        div.appendChild(label);
-        div.appendChild(newSelect);
+            let label = document.createElement("label");
+            label.innerText = "Option:";
+            
+            let div = document.createElement("div");
+            div.className = "form-group";
+            div.appendChild(label);
+            div.appendChild(newSelect);
 
-        container.appendChild(div);
-        document.getElementById('charge_amount').value = 0.00;
+            container.appendChild(div);
+            setElementValue('charge_amount', '0.00');
+        }
     } else {
-        document.getElementById('charge_amount').value = '';
+        setElementValue('charge_amount', '');
     }
 }
 
+// Function to get emergency status
 async function emergency() {
     showLoader();
     try {
@@ -215,46 +299,75 @@ async function emergency() {
 
         if (data.status) {
             hideLoader();
-            document.getElementById('emergency').value = data.emergency;
-            return data.emergency; // Return the emergency value
+            const emergencySelect = document.getElementById('emergency');
+            if (emergencySelect) {
+                emergencySelect.value = data.emergency;
+            }
+            return data.emergency;
         } else {
-            toastr.error("Error: " + data.message);
-            return null; // Return null in case of an error
+            if (typeof toastr !== 'undefined') {
+                toastr.error("Error: " + data.message);
+            }
+            hideLoader();
+            return null;
         }
     } catch (error) {
         console.error("Error fetching emergency data:", error);
-        return null; // Return null if fetch fails
+        if (typeof toastr !== 'undefined') {
+            toastr.error("Failed to fetch emergency status");
+        }
+        hideLoader();
+        return null;
     }
 }
 
-function tuster(){
+// Function to test emergency status
+function tuster() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]');
+    const headers = {};
+    if (csrfToken) {
+        headers["X-CSRF-TOKEN"] = csrfToken.getAttribute("content");
+    }
+
     fetch("http://localhost/laravel_setup/emergency", {
         method: "GET",
-        headers: {
-            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-        }
+        headers: headers
     })
     .then(response => response.json())
     .then(data => {
         if (data.status) {
-           if(data.emergency == 'no'){
-            toastr.info("General Opd Working");
-           }else{
-            toastr.info("Emergency Opd Working");
-           }
+            if (typeof toastr !== 'undefined') {
+                if (data.emergency == 'no') {
+                    toastr.info("General Opd Working");
+                } else {
+                    toastr.info("Emergency Opd Working");
+                }
+            }
         } else {
-            toastr.error("Error: " + data.message);
+            if (typeof toastr !== 'undefined') {
+                toastr.error("Error: " + data.message);
+            }
         }
     })
-    .catch(error => console.error("Error:", error));
+    .catch(error => {
+        console.error("Error:", error);
+        if (typeof toastr !== 'undefined') {
+            toastr.error("Failed to check emergency status");
+        }
+    });
 }
 
+// Loader functions
 function showLoader() {
-    document.getElementById('preloader').style.display = 'block';
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        preloader.style.display = 'block';
+    }
 }
 
 function hideLoader() {
-    document.getElementById('preloader').style.display = 'none';
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        preloader.style.display = 'none';
+    }
 }
-
-
