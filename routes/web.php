@@ -7,6 +7,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PasientController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\ExportUserController;
 
 
 Route::get('/', function () {
@@ -21,6 +23,14 @@ Route::middleware(['auth', 'user'])->group(function () {});
 
 // Admin Dashboard
 Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::get('/doctor', [DoctorController::class, 'index'])->name('index.doctor');
+    Route::get('/doctorylist', [DoctorController::class, 'doctorylist'])->name('doctorylist');
+    Route::post('/doctorcreate', [DoctorController::class, 'store'])->name('doctor_store');
+
+    Route::get('/doctor_view/{id}', [DoctorController::class, 'show'])->name('doctor.show');
+    Route::post('/doctor_update/{id}', [DoctorController::class, 'doctor_update'])->name('doctor.update');
+    Route::post('/doctor_delete/{id}', [DoctorController::class, 'destroy'])->name('doctor.delete');
 
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/check', [AdminController::class, 'check'])->name('admin.check');
@@ -50,6 +60,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/opdsearchData', [PasientController::class, 'opdsearchData'])->name('opdsearchData');
     Route::get('/export-users', [PasientController::class, 'exportUsers']);
 
+  
+    Route::get('/getopdLIst', [PasientController::class, 'getopdLIst'])->name('getopdLIst');
+    Route::post('/getopdLIstfilter', [ExportUserController::class, 'getopdLIstfilter'])->name('getopdLIstfilter');
+    Route::get('/export-users', [PasientController::class, 'exportUsers']);
+    Route::get('/reentry/{id}', [PasientController::class, 'reentry'])->name('reentry');
+
+
+    // Route::post('/getopdLIstfilter', [ExportUserController::class, 'getopdLIstfilter'])->name('getopdLIstfilter');
 });
 
 Route::middleware(['auth:agent', 'agent.status'])->group(function () {

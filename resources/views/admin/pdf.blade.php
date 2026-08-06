@@ -38,8 +38,8 @@
 
         .registration {
             position: absolute;
-            top: 0px;
-            right: 90px;
+            top: 100px;
+            right: 130px;
             text-align: right;
             font-weight: bold;
             font-size: 14px;
@@ -47,8 +47,8 @@
 
         .energency_contact {
             position: absolute;
-            top: 30px;
-            right: 30px;
+            top: 100px;
+            right: 130px;
             text-align: right;
             font-weight: bold;
             font-size: 14px;
@@ -113,7 +113,7 @@
         }
 
         .first_part ul li {
-            margin-top: 5px;
+            margin-top: 7px;
             font-size: 12.2px;
         }
 
@@ -168,6 +168,19 @@
             width: 100px;
             height: 100px;
         }
+        .second_logo img {
+            position: absolute;
+            top: 10px;
+            right: 35px;
+            width: 100px;
+            height: 100px;
+        }
+        img {
+            background: transparent !important;
+        }
+        .test{
+            margin-top:11px;
+        }
     </style>
 
 </head>
@@ -179,24 +192,28 @@
             <div class="logo">
                 <img src="{{ public_path('img/opd_ipd_logo.jpg') }}" style="margin-top:10px;"/>
             </div>
+            <div class="second_logo">
+                <img src="{{ public_path('img/second_logo.jpeg') }}" style="margin-top:10px;"/>
+            </div>
+            <p style="color:red">(Gerneral Charges :- 10 / Emergency Charges :- 30)((IPD Amount :30))</p>
             <!-- <p>रोगी कल्याण समिति</p> -->
             <p>Patient Welfare Committee</p>
             <!-- <p>डॉ.भीमराव अम्बेडकर सामु.स्वा. केन्द्र</p> -->
-            <p>Dr. Bhimrao Ambedkar Samu.Sw. center</p>
+            <p>Doctor Bheemrav Ambedkar Civil Hospital</p>
             <!-- <p>सिवनी मालवा, जिला-नर्मदापुरम (म.प्र.)</p> -->
             <p>Seoni Malwa, District-Narmadapuram (M.P.)</p>
-            <p>Dr. Bheemrao Ambedkar Community Health Center - Seoni Malwa,</p>
+            <p>Doctor Bheemrav Ambedkar Civil Hospital - Seoni Malwa,</p>
             <p>Distt-Narmadapuram (M.P.)</p>
             <div class="registration"style="margin-top:10px;">
                 @if($lastEntry)
-                <p>Registration No: {{$lastEntry->opdId}}</p>
+                <p>Registration No: {{$lastEntry->opdId}}/228390</p>
                 @else
                 <p>Registration No: 12345</p>
                 @endif
             </div>
-            <div class="energency_contact" style="margin-top:13px;">
+            <!-- <div class="energency_contact" style="margin-top:13px;">
                 <p>Emergency Call No : 108/100</p>
-            </div>
+            </div> -->
         </div>
 
         @if($lastEntry)
@@ -233,19 +250,27 @@
             <p class="details_section1">Patient registration</p>
             <div class="details" style="">
                 <div class="details_left"style="margin-top:15px !important;">
-                    <p>Patient Name : {{ $lastEntry->pesientname ?? '' }}</p>
-                    <p>Age : {{ $lastEntry->age ?? '' }} {{ $lastEntry->ymd ?? '' }}</p>
-                    <p>Address : {{ $lastEntry->address ?? '' }}</p>
-                    <p>Disease : {{ $lastEntry->desease ?? '' }}</p>
-                    <p>MLC/PMLC : {{ $lastEntry->mlc_pmlc ?? '' }}</p>
+                    <strong><p>Patient Name : {{ $lastEntry->pesientname ?? '' }}</p> </strong>
+                    <strong><p>Age : {{ $lastEntry->age ?? '' }} {{ $lastEntry->ymd ?? '' }}</p></strong>
+                    <strong><p>Address : {{ $lastEntry->address ?? '' }}</p></strong>
+                    <strong><p>Disease : {{ $lastEntry->desease ?? '' }}</p></strong>
+                    <strong><p>MLC/PMLC : {{ $lastEntry->mlc_pmlc ?? '' }}</p></strong>
                 </div>
                 <div class="details_right">
-                    <p>Father/Husband Name : {{ $lastEntry->fatherhusband ?? '' }}</p>
-                    <p>Gender : {{ $lastEntry->gender ?? '' }}</p>
-                    <p>Contact No : {{ $lastEntry->mobileno ?? '' }}</p>
-                    <p>Registration date : {{ $lastEntry->pdate ?? '' }},{{ $formattedTime }}</p>
-                    <p>Fee / Free : {{ $lastEntry->chargesamount ?? '' }} rs {{ $res }}</p>
-                    <p>{{ $lastEntry->charges ?? '' }}</p>
+                <strong><p>Father/Husband Name : {{ $lastEntry->fatherhusband ?? '' }}</p></strong>
+                <strong><p>Gender : {{ $lastEntry->gender ?? '' }}</p></strong>
+                <strong><p>Contact No : {{ $lastEntry->mobileno ?? '' }}</p></strong>
+                <strong> <p>Registration date : {{ $lastEntry->pdate ?? '' }},{{ $formattedTime }}</p></strong>
+                <strong>
+                    @if($lastEntry->chargesamount == 10)
+                        <p>Fee / Free : {{ $lastEntry->chargesamount ?? '' }} rs {{ $res }} (GENERAL CHARGES)</p>
+                    @else
+                        <p>Fee / Free : {{ $lastEntry->chargesamount ?? '' }} rs {{ $res }} (EMERGENCY CHARGES)</p>
+                    @endif
+
+                    <!-- <p>Fee / Free : {{ $lastEntry->chargesamount ?? '' }} rs {{ $res }}</p> -->
+                </strong>
+                <strong><p>{{ $lastEntry->charges ?? '' }}</p></strong>
                 </div>
             </div>
         </div>
@@ -261,13 +286,11 @@
                     <li>[ ] ECG</li>
                     <li>[ ] USG </li>
                     <li>[ ] BMP </li>
-                    <li>[ ] X-BAY </li>
+                    <li>[ ] X-RAY </li>
                     <li>[ ] Acid-fast bacilus(AFB) </li>
                     <li>[ ] CBC </li>
                     <li>[ ] Hb </li>
                     <li>[ ] T and D </li>
-                    <li>[ ] T and D </li>
-                    <li>[ ] Pallets Count </li>
                     <li>[ ] Pallets Count </li>
                     <li>[ ] Blood Presure(BP) </li>
                     <li>[ ] Blood group-Rh Factor </li>
@@ -288,9 +311,9 @@
             </div>
 
             <div class="second_part">
-                <p class="p1">Brief Histoey :</p>
-                <p class="p2">G/F :</p>
-                <p class="p3"> Presumptive/Definite Diagnosis :</p>
+                <p class="test p1">Brief History :</p>
+                <p class="test p2">G/E :</p>
+                <p class="test p3"> Presumptive/Definite Diagnosis :</p>
                 <p class="footer_line">This slip is valid for 7 days. After 7 days, a second slip is mandatory</p>
                 <img src="{{ public_path('img/aaaa.jpg') }}" style="width:30px; height:30px; margin-top:10px;margin-left:15px;" />
                 <p style="margin-left:65px; margin-top:-30px;text-align:center">Treatment Advised</p>
@@ -304,7 +327,7 @@
             <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
         </div>
         <div class="pdfFooter" style="">
-            <p class="pdffooter_line" style="text-align: center; font-size:14px;background-color:black;color:white;">Dr. Bhimrao Ambedkar Samu.Sw. Center Seoni Malwa, District-Narmadapuram (M.P.) - Free Medicine Distribution Center</p>
+            <p class="pdffooter_line" style="text-align: center; font-size:14px;background-color:black;color:white;">Doctor Bheemrav Ambedkar Civil Hospital - Seoni Malwa, District-Narmadapuram (M.P.) - Free Medicine Distribution Center</p>
             <div class="medicin" style="">
                 @if($lastEntry)
                 @php
@@ -313,14 +336,14 @@
                 $formattedTime = \Carbon\Carbon::createFromFormat('H:i:s', $time)->format('h:i A');
                 @endphp
                 <div class="left" style="font-family: Arial, sans-serif; font-size: 12px; line-height: 1.5;">
-                    <p>External Registration Co :- {{ $lastEntry->opdId ?? '' }}</p>
-                    <p>Registration date :- {{ $lastEntry->pdate ?? '' }}, {{ $formattedTime }}</p>
-                    <p>Patient Name :- {{ $lastEntry->pesientname ?? '' }}</p>
-                    <p>Father/Husband Name :- {{ $lastEntry->fatherhusband ?? '' }}</p>
-                    <p>Mobile Number :- {{ $lastEntry->mobileno ?? '' }}</p>
-                    <p>Age/Gender :- {{ $lastEntry->age ?? '' }} {{ $lastEntry->gender ?? '' }} {{ $lastEntry->ymd ?? '' }}</p>
-                    <p>Address :- {{ $lastEntry->address ?? '' }}</p>
-                    <p>Disease :- {{ $lastEntry->desease ?? '' }}</p>
+                    <strong><p>External Registration Co :- {{ $lastEntry->opdId ?? '' }}<<strong>
+                    <strong><p>Registration date :- {{ $lastEntry->pdate ?? '' }}, {{ $formattedTime }}<<strong>
+                    <strong><p>Patient Name :- {{ $lastEntry->pesientname ?? '' }}<<strong>
+                    <strong><p>Father/Husband Name :- {{ $lastEntry->fatherhusband ?? '' }}<<strong>
+                    <strong><p>Mobile Number :- {{ $lastEntry->mobileno ?? '' }}<<strong>
+                    <strong><p>Age/Gender :- {{ $lastEntry->age ?? '' }} {{ $lastEntry->gender ?? '' }} {{ $lastEntry->ymd ?? '' }}<<strong>
+                    <strong><p>Address :- {{ $lastEntry->address ?? '' }}<<strong>
+                    <strong><p>Disease :- {{ $lastEntry->desease ?? '' }}<<strong>
                 </div>
 
                 @else

@@ -19,7 +19,7 @@
 
         <li class="nav-item">
             <a class="nav-link" href="{{ route('ipd') }}">
-            <i class="bi bi-hospital"></i>
+                <i class="bi bi-hospital"></i>
                 <span>IPD</span>
             </a>
         </li><!-- End IPD Nav -->
@@ -47,6 +47,11 @@
                 <li>
                     <a href="{{route('listpage')}}">
                         <i class="bi bi-circle"></i><span>LIST</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{route('index.doctor')}}">
+                        <i class="bi bi-circle"></i><span>Doctor</span>
                     </a>
                 </li>
             </ul>

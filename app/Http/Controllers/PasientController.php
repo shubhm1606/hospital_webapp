@@ -20,28 +20,28 @@ class PasientController extends Controller
         $post = pasient_details::updateOrCreate(
             ['opdId' => $request->opd_id],
             [
-                'pesientname'=> $request->patient_name,
-                'gender'=> $request->gender,
-                'age'=>  $request->age,
-                'fatherhusband'=> $request->father_husband_name,
-                'mobileno'=>  $request->mobile_no,
-                'address'=>  $request->address,
-                'area'=>  $request->area,
-                'caste'=>  $request->caste,
-                'desease'=>  $request->disease,
-                'mlc_pmlc'=>  $request->mlc_pmlc,
-                'charges'=>  $request->charges,
-                'chargesamount'=>  $request->charge_amount,
-                'sr'=> $request->serialnumber,
-                'opdId'=> $request->opd_id,
+                'pesientname' => $request->patient_name,
+                'gender' => $request->gender,
+                'age' =>  $request->age,
+                'fatherhusband' => $request->father_husband_name,
+                'mobileno' =>  $request->mobile_no,
+                'address' =>  $request->address,
+                'area' =>  $request->area,
+                'caste' =>  $request->caste,
+                'desease' =>  $request->disease,
+                'mlc_pmlc' =>  $request->mlc_pmlc,
+                'charges' =>  $request->charges,
+                'chargesamount' =>  $request->charge_amount,
+                'sr' => $request->serialnumber,
+                'opdId' => $request->opd_id,
                 'pdate' => $request->date,
                 'ymd' => $request->days,
-                'free_option'=> $request->free_option,
-                'ptime'=> $ptime,
-                'tags'=> $request->tags,
+                'free_option' => $request->free_option,
+                'ptime' => $ptime,
+                'tags' => $request->tags,
             ]
         );
-        
+
 
         if ($post) {
             return response()->json(["msg" => 'Data Submit Successfully', 'status' => 'true']);
@@ -54,15 +54,15 @@ class PasientController extends Controller
     {
 
         $patients = pasient_details::all();
-        
+
         $emergencies = Emergency::all()->pluck('emergency');
-        
+
         $emergency_type = $emergencies->first() ?? '';
-        
+
         date_default_timezone_set("Asia/Kolkata");
         $date = date("Y-m-d");
         $time = date("h:i:s A");
-    
+
         if (!$patients->isEmpty()) {
 
             $lastPatient = $patients->last();
@@ -73,7 +73,7 @@ class PasientController extends Controller
             $opdnumber = 1;
             $serialnumber = 1;
         }
-    
+
         $data = [
             'serialnumber' => $serialnumber,
             'opdnumber' => $opdnumber,
@@ -84,7 +84,7 @@ class PasientController extends Controller
         // dd($data);
         return response()->json(["data" => $data, 'status' => 'true']);
     }
-    
+
 
     public function getIpdnumber()
     {
@@ -209,10 +209,10 @@ class PasientController extends Controller
             SUM(CASE WHEN charges = 'FREE' AND tags = 'general' THEN 1 ELSE 0 END) as opd_free_count,
             SUM(CASE WHEN charges = 'PAID' AND tags = 'general' THEN chargesamount ELSE 0 END) as opd_total_amount
         ")
-        ->whereBetween('pdate', [$startDate, $endDate])
-        ->groupBy('date')
-        ->get()
-        ->keyBy('date');
+            ->whereBetween('pdate', [$startDate, $endDate])
+            ->groupBy('date')
+            ->get()
+            ->keyBy('date');
 
         // Retrieve Emergency OPD Data
         $emeryopdData = pasient_details::selectRaw("
@@ -221,10 +221,10 @@ class PasientController extends Controller
             SUM(CASE WHEN charges = 'FREE' AND tags = 'emergency' THEN 1 ELSE 0 END) as em_opd_free_count,
             SUM(CASE WHEN charges = 'PAID' AND tags = 'emergency' THEN chargesamount ELSE 0 END) as em_opd_total_amount
         ")
-        ->whereBetween('pdate', [$startDate, $endDate])
-        ->groupBy('date')
-        ->get()
-        ->keyBy('date');
+            ->whereBetween('pdate', [$startDate, $endDate])
+            ->groupBy('date')
+            ->get()
+            ->keyBy('date');
 
         // Retrieve IPD Data
         $ipdData = IpdDetails::selectRaw("
@@ -233,10 +233,10 @@ class PasientController extends Controller
             SUM(CASE WHEN ipdamount_type = 'FREE' THEN 1 ELSE 0 END) as ipd_free_count,
             SUM(CASE WHEN ipdamount_type = 'PAID' THEN ipdamount ELSE 0 END) as ipd_total_amount
         ")
-        ->whereBetween('ipd_date', [$startDate, $endDate])
-        ->groupBy('date')
-        ->get()
-        ->keyBy('date');
+            ->whereBetween('ipd_date', [$startDate, $endDate])
+            ->groupBy('date')
+            ->get()
+            ->keyBy('date');
 
         // Combine all data
         $dates = $opdData->keys()
@@ -272,7 +272,7 @@ class PasientController extends Controller
         ]);
     }
 
-  
+
 
     public function exportToPdf(Request $request)
     {
@@ -287,10 +287,10 @@ class PasientController extends Controller
             SUM(CASE WHEN charges = 'FREE' AND tags = 'general' THEN 1 ELSE 0 END) as opd_free_count,
             SUM(CASE WHEN charges = 'PAID' AND tags = 'general' THEN chargesamount ELSE 0 END) as opd_total_amount
         ")
-        ->whereBetween('pdate', [$startDate, $endDate])
-        ->groupBy('date')
-        ->get()
-        ->keyBy('date');
+            ->whereBetween('pdate', [$startDate, $endDate])
+            ->groupBy('date')
+            ->get()
+            ->keyBy('date');
 
         // Retrieve Emergency OPD Data
         $emeryopdData = pasient_details::selectRaw("
@@ -299,10 +299,10 @@ class PasientController extends Controller
             SUM(CASE WHEN charges = 'FREE' AND tags = 'emergency' THEN 1 ELSE 0 END) as em_opd_free_count,
             SUM(CASE WHEN charges = 'PAID' AND tags = 'emergency' THEN chargesamount ELSE 0 END) as em_opd_total_amount
         ")
-        ->whereBetween('pdate', [$startDate, $endDate])
-        ->groupBy('date')
-        ->get()
-        ->keyBy('date');
+            ->whereBetween('pdate', [$startDate, $endDate])
+            ->groupBy('date')
+            ->get()
+            ->keyBy('date');
 
         // Retrieve IPD Data
         $ipdData = IpdDetails::selectRaw("
@@ -311,10 +311,10 @@ class PasientController extends Controller
             SUM(CASE WHEN ipdamount_type = 'FREE' THEN 1 ELSE 0 END) as ipd_free_count,
             SUM(CASE WHEN ipdamount_type = 'PAID' THEN ipdamount ELSE 0 END) as ipd_total_amount
         ")
-        ->whereBetween('ipd_date', [$startDate, $endDate])
-        ->groupBy('date')
-        ->get()
-        ->keyBy('date');
+            ->whereBetween('ipd_date', [$startDate, $endDate])
+            ->groupBy('date')
+            ->get()
+            ->keyBy('date');
 
         // Combine all data
         $dates = $opdData->keys()
@@ -382,7 +382,7 @@ class PasientController extends Controller
         if ($data) {
             $emerydata = $data->emergency;
         } else {
-            $emerydata = null; 
+            $emerydata = null;
         }
 
         return response()->json([
@@ -398,19 +398,18 @@ class PasientController extends Controller
         // $patient_name = $request->input('patient_name');
 
         $opdDatafetch = pasient_details::where('opdId', $id)
-        ->first();
-        if(!empty($opdDatafetch)){
-            return response()->json(['status'=>true,'data'=>$opdDatafetch]);
-        }else{
-            return response()->json(['status'=>false,'msg'=>'Data not found']);
+            ->first();
+        if (!empty($opdDatafetch)) {
+            return response()->json(['status' => true, 'data' => $opdDatafetch]);
+        } else {
+            return response()->json(['status' => false, 'msg' => 'Data not found']);
         }
-
     }
 
     public function generatePdf($opdId)
     {
         $lastEntry = pasient_details::where('opdId', $opdId)->first();
-    
+
         if (!$lastEntry) {
             abort(404, 'Patient not found.');
         }
@@ -418,6 +417,24 @@ class PasientController extends Controller
         $pdf = Pdf::loadView('admin.pdf', compact('lastEntry'));
         return $pdf->stream('details.pdf');
     }
-    
+
+
+    public function getopdLIst(Request $request)
+    {
+        $opdDatafetch = pasient_details::orderBy('sno', 'desc')->get();
+        return response()->json([
+            'status' => true,
+            'message' => 'OPD data fetched successfully',
+            'data' => $opdDatafetch
+        ]);
+    }
+
+    public function reentry($id)
+    {
+        // Example: ID से details fetch
+        $details = pasient_details::where('opdId', $id)->first();
+
+        return view('admin.from', compact('details'));
+    }
     
 }

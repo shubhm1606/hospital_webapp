@@ -161,6 +161,13 @@
             margin-bottom: 5px;
             /* Adjust this value for desired spacing */
         }
+        .second_logo img {
+            position: absolute;
+            top: 10px;
+            right: 35px;
+            width: 100px;
+            height: 100px;
+        }
     </style>
 
 </head>
@@ -179,18 +186,21 @@
             <div class="logo">
                 <img src="{{ public_path('img/opd_ipd_logo.jpg') }}" alt="Logo" style="margin-top: 12px;" />
             </div>
+            <div class="second_logo">
+                <img src="{{ public_path('img/second_logo.jpeg') }}" style="margin-top:10px;"/>
+            </div>
             <!-- <p>रोगी कल्याण समिति</p> -->
             <p>Patient Welfare Committee</p>
             <!-- <p>डॉ.भीमराव अम्बेडकर सामु.स्वा. केन्द्र</p> -->
-            <p>Dr. Bhimrao Ambedkar Samu.Sw. center</p>
+            <p>Doctor Bheemrav Ambedkar Civil Hospital</p>
             <!-- <p>सिवनी मालवा, जिला-नर्मदापुरम (म.प्र.)</p> -->
             <p>Seoni Malwa, District-Narmadapuram (M.P.)</p>
-            <p>Dr. Bheemrao Ambedkar Community Health Center - Seoni Malwa,</p>
+            <p>Doctor Bheemrav Ambedkar Civil Hospital - Seoni Malwa,</p>
             <p>Distt-Narmadapuram (M.P.)</p>
 
-            <div class="energency_contact">
+            <!-- <div class="energency_contact">
                 <p>Emergency Call No : 108/100</p>
-            </div>
+            </div> -->
         </div>
 
 
@@ -253,7 +263,7 @@
             <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
         </div>
         <div class="pdfFooter" style="">
-            <p class="pdffooter_line" style="text-align: center; font-size:14px;background-color:black;color:white;">Dr. Bhimrao Ambedkar Samu.Sw. Center Seoni Malwa, District-Narmadapuram (M.P.)</p>
+            <p class="pdffooter_line" style="text-align: center; font-size:14px;background-color:black;color:white;">Doctor Bheemrav Ambedkar Civil Hospital - Seoni Malwa(M.P.)</p>
             <p style="text-align:center">Ward Entry Gate Pass</p>
             <div class="medicin" style="">
 

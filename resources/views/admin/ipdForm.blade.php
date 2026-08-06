@@ -121,21 +121,29 @@
                                         <label for="disease">Rerferd BY Dr:</label>
                                         <select class="form-control" name="refDr" id="refDr">
                                             <option value="">NONE</option>
-                                            <option value="Dr. Kanti Batham">डॉ. कांति बाथम</option>
-                                            <option value="Dr. Shekhar Raghuvanshi">डॉ. शेखर रघुवंशी</option>
-                                            <option value="Dr. Rishi Chaubey">डॉ. ऋषि चौबे</option>
-                                            <option value="Dr. Brajesh Rajput">डॉ. ब्रजेश राजपूत</option>
-                                            <option value="Dr. Kamakshi Gehlot">डॉ. कामाक्षी गहलोत</option>
-                                            <option value="Dr. Rishi Sahu">डॉ. ऋषि साहू</option>
-                                            <option value="Dr. Virendra Singh Raag">डॉ. वीरेंद्र सिंह राग</option>
-                                            <option value="Dr. Ayushi Agrawal">डॉ. आयुषी अग्रवाल</option>
-                                            <option value="Dr. Shweta Raghuvan">डॉ. श्वेता रघुवान</option>
-                                            <option value="Dr. Poonam Gaur">डॉ. पूनम गौर</option>
-                                            <option value="Dr. Jai Singh Kushwaha">डॉ. जय सिंह कुशवाह</option>
-                                            <option value="Dr. Shubham Mahto">डॉ. शुभम महतो</option>
-                                            <option value="Dr. Shailendra Yadav">डॉ. शैलेन्द्र यादव</option>
-                                            <option value="Dr. Vishakha Rajput">डॉ. विशाखा राजपूत</option>
-                                            <option value="Dr. Aashi Chaure">डॉ. आशी चौरे</option>
+                                            @foreach($doctors as $doctor)
+                                            <option value="{{$doctor->name_en}}">{{$doctor->name_hi}}</option>
+                                            @endforeach
+                                            <!-- <option value="Dr. Kanti Batham">डॉ. कांति बाथम</option> -->
+                                            <!-- <option value="Dr. Shekhar Raghuvanshi">डॉ. शेखर रघुवंशी</option> -->
+                                            <!-- <option value="Dr. Rishi Chaubey">डॉ. ऋषि चौबे</option> -->
+                                            <!-- <option value="Dr. Brajesh Rajput">डॉ. ब्रजेश राजपूत</option> -->
+                                            <!-- <option value="Dr. Kamakshi Gehlot">डॉ. कामाक्षी गहलोत</option> -->
+                                            <!-- <option value="Dr. Rishi Sahu">डॉ. ऋषि साहू</option> -->
+                                            <!-- <option value="Dr. Virendra Singh Raag">डॉ. वीरेंद्र सिंह</option> -->
+                                            <!-- <option value="Dr. Ayushi Agrawal">डॉ. आयुषी अग्रवाल</option> -->
+                                            <!-- <option value="Dr. Shweta Raghuvan">डॉ. श्वेता रघुवान</option> -->
+                                            <!-- <option value="Dr. Poonam Gaur">डॉ. पूनम गौर</option> -->
+                                            <!-- <option value="Dr. Jai Singh Kushwaha">डॉ. जय सिंह कुशवाह</option> -->
+                                            <!-- <option value="Dr. Shubham Mahto">डॉ. शुभम महतो</option> -->
+                                            <!-- <option value="Dr. Shailendra YADUVANSHI">डॉ. शैलेन्द्र यदुवंशी</option> -->
+                                            <!-- <option value="Dr. Vishakha Rajput">डॉ. विशाखा राजपूत</option> -->
+                                            <!-- <option value="Dr. Aashi Chaure">डॉ. आशी चौरे</option> -->
+                                            <!-- <option value="Dr. ANKITA POGHAT">डॉ. अंकिता फोगाट</option> -->
+                                            <!-- <option value="Dr. Neha Dwevadi">डॉ. नेहा द्विवेदी</option> -->
+                                            <!-- <option value="Dr. Ankit Tiwari">डॉ.अंकित तिवारी</option> -->
+                                            <!-- <option value="Dr. Dhara Negi">डॉ.धरा नेगी</option> -->
+                                            <option value="Dr. ">डॉ. </option>
                                         </select>
                                         <span class="doctorErr"></span>
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\pasient_details;
 use App\Models\IpdDetails;
 use Barryvdh\DomPDF\Facade\Pdf;
+use DB;
 
 class HomeController extends Controller
 {
@@ -95,7 +96,8 @@ class HomeController extends Controller
     }
     public function ipd()
     {
-        return view('admin.ipdForm');
+        $doctors = DB::table('doctors')->where('is_active', '1')->get();
+        return view('admin.ipdForm', compact('doctors'));
     }
 
     public function records()
