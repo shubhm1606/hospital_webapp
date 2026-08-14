@@ -37,7 +37,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Form submission handler
     const submitForm = document.getElementById("submitdata");
+    console.log("submitForm:", submitForm);
     if (submitForm) {
+        console.log("Form submit event listener added.");
         submitForm.addEventListener("submit", function (e) {
             e.preventDefault();
             
@@ -261,15 +263,44 @@ function chagersupdate(chargeType) {
             newSelect.id = "free_option";
             newSelect.className = "form-control";
             
-            let option1 = new Option("Aayushman Card", "aayushmaan");
-            let option2 = new Option("100 Dial", "100_dial");
-            let option3 = new Option("Janani Express", "janani_express");
-            let option4 = new Option("Staff", "staff");
-            
+            let option1 = new Option("Aayushman Card", "ayushman_card");
+            let option2 = new Option("Delivery Case", "delivery_case");
+            let option3 = new Option("Staff", "staff");
+            let option4 = new Option("108 Ambulance", "108_ambulance");
+            let option5 = new Option("PENSIONAR", "pensionar");
+            let option6 = new Option("ANC Check-up", "anc_check-up");
+            let option7 = new Option("MLC", "mlc");
+            let option8 = new Option("JSY Delivery Case", "jsy_delivery_case");
+            let option9 = new Option("LTT Case", "ltt_case");
+            let option10 = new Option("NRC Child", "nrc_child");
+            let option11 = new Option("OLD AGE HOME", "old_age_home");
+            let option12 = new Option("100 Dial", "100_dial");
+            let option13 = new Option("BABY CHECKUP", "baby_checkup");
+            let option14 = new Option("BOYS & GIRLS HOSTEL", "boys_girls_hostel");
+            let option15 = new Option("T.B. MEDICINE", "t.b._medicine");
+            let option16 = new Option("CARDLESS / CASELESS", "cardless_caseless");
+            let option17 = new Option("Janani Express", "janani_express");
+            let option18 = new Option("Staff", "staff");
+
+
             newSelect.appendChild(option1);
             newSelect.appendChild(option2);
             newSelect.appendChild(option3);
             newSelect.appendChild(option4);
+            newSelect.appendChild(option5);
+            newSelect.appendChild(option6);
+            newSelect.appendChild(option7);
+            newSelect.appendChild(option8);
+            newSelect.appendChild(option9);
+            newSelect.appendChild(option10);
+            newSelect.appendChild(option11);
+            newSelect.appendChild(option12);
+            newSelect.appendChild(option13);
+            newSelect.appendChild(option14);
+            newSelect.appendChild(option15);
+            newSelect.appendChild(option16);
+            newSelect.appendChild(option17);
+            newSelect.appendChild(option18);
 
             let label = document.createElement("label");
             label.innerText = "Option:";

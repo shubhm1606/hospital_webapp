@@ -62,7 +62,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
   
     Route::get('/getopdLIst', [PasientController::class, 'getopdLIst'])->name('getopdLIst');
-    Route::post('/getopdLIstfilter', [ExportUserController::class, 'getopdLIstfilter'])->name('getopdLIstfilter');
+    Route::get('/getopdLIstfilter', [ExportUserController::class, 'getopdLIstfilter'])->name('getopdLIstfilter');
+    Route::post('/export-users-datewise', [ExportUserController::class, 'exportUsersDatewise'])
+    ->name('export.users.datewise');
     Route::get('/export-users', [PasientController::class, 'exportUsers']);
     Route::get('/reentry/{id}', [PasientController::class, 'reentry'])->name('reentry');
 
@@ -75,3 +77,47 @@ Route::middleware(['auth:agent', 'agent.status'])->group(function () {
 });
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
+Route::get('/test-font-mpdf2', function() {
+    $mpdf = new \Mpdf\Mpdf([
+        'mode' => 'utf-8',
+        'format' => 'A4',
+        'default_font' => 'freeserif',  // Built-in font
+    ]);
+
+    $mpdf->SetFont('freeserif', '', 16);
+    
+    $html = '
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <h1>Test Hindi Font (FreeSerif)</h1>
+        <p><b>Patient:</b> शुभम सूर्यवंशी</p>
+        <p><b>Father:</b> ओमप्रकाश सूर्यवंशी</p>
+        <p><b>Address:</b> सिवनी मालवा वार्ड नंबर 12</p>
+    </body>
+    </html>
+    ';
+    
+    $mpdf->WriteHTML($html);
+    return $mpdf->Output('test-font2.pdf', 'I');
+});
+
+Route::get('/check-font-mpdf', function() {
+    $fontPath = public_path('fonts/NotoSansDevanagari-Regular.ttf');
+    
+    if (file_exists($fontPath)) {
+        return "✅ Font exists! Path: " . $fontPath . "<br>Size: " . filesize($fontPath) . " bytes";
+    } else {
+        return "❌ Font not found! Path: " . $fontPath;
+    }
+});
+
+
+Route::get('/testcheck', function() {
+    return view('admin.testcheck');
+});

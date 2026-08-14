@@ -1,284 +1,339 @@
 <!DOCTYPE html>
 <html lang="hi">
-
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Ek+Mukta" rel="stylesheet">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>IPD Registration</title>
     <style>
+       
+
         * {
-            margin: 0px;
-            padding: 0px;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            /* font-family: 'Noto Sans Devanagari', sans-serif; */
-            font-family: 'Mangal', 'Noto Sans Devanagari', 'Arial Unicode MS', sans-serif;
-
+            font-family: freeserif, DejaVu Sans, Mangal, sans-serif;
+            font-size: 11px;
+            color: #000;
         }
 
-        .container-fluid {
-            position: absolute;
-            /* border: 1px solid red; */
+        table {
             width: 100%;
-            top: 0px;
-            /* margin: auto; */
+            border-collapse: collapse;
         }
 
-        .pdf-header {
-            /* border: 1px solid green; */
-            text-align: center;
-        }
-
-        .pdf-header p {
-            margin: 3px 0;
-            font-size: 12px;
-        }
-
-        .registration {
-            position: absolute;
-            top: 0px;
-            right: 90px;
-            text-align: right;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .energency_contact {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-            text-align: right;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .details_section {
-            /* border: 1px solid pink; */
-            /* margin-top: 10px; */
-            padding: 10px;
-            position: relative;
-        }
-
-        .details_section1 {
-            position: absolute;
-            top: 0px;
-            background-color: black;
-            color: white;
-            /* font-weight: bold; */
-            text-align: center;
-            /* width: 100%;
-            padding: 5px; */
-        }
-
-        .details {
-            margin-top: 18px;
-            border: 2px solid black;
-            font-size: 13px;
-            padding: 5px;
-        }
-
-        .details .details_left {
-            display: inline-block;
-            width: 45%;
-        }
-
-        .details .details_right {
-            display: inline-block;
-            width: 45%;
+        td {
             vertical-align: top;
         }
 
-        .duble_section {
-            /* border: 2px solid black; */
+        .text-center { text-align: center; }
+        .text-right  { text-align: right; }
+        .text-left   { text-align: left; }
+        .bold        { font-weight: bold; }
+
+        /* ===== HEADER ===== */
+        .header-table {
+            width: 100%;
+            margin-bottom: 2px;
+        }
+
+        .header-table img {
+            width: 65px;
+            height: 65px;
+        }
+
+        .header-center {
+            text-align: center;
+            line-height: 1.25;
+        }
+
+        .header-center .title {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .header-center .sub {
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* ===== BLACK TITLE ===== */
+        .black-title {
+            background: #000;
+            color: #fff;
+            text-align: center;
+            font-weight: bold;
+            padding: 4px 0;
+            font-size: 13px;
+            margin: 4px 0 3px 0;
+        }
+
+        /* ===== PATIENT BOX ===== */
+        .patient-box {
+            border: 1.5px solid #000;
+            padding: 5px 7px;
+            margin-bottom: 4px;
+        }
+
+        .patient-box td {
+            font-size: 15px;
+            line-height: 1.45;
+            padding: 1px 3px;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        /* ===== DIAGNOSIS LINES ===== */
+        .diag-section {
+            margin: 3px 0 5px 0;
+        }
+
+        .diag-row {
+            margin: 3px 0;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .diag-line {
+            display: inline-block;
+            width: 85%;
+            height: 14px;
+            vertical-align: bottom;
+        }
+
+        /* ===== MAIN WRITING AREA ===== */
+        .writing-table {
+            width: 100%;
+            border: 1.5px solid #000;
+             height: 960px !important;
+            margin-bottom: 4px;
+        }
+
+        .writing-left {
+            width: 68%;
+            border-right: 1.5px solid #000;
+            height: 540px;
+            padding: 6px 8px;
             position: relative;
-            margin-top: -12px;
         }
 
-        .first_part {
-            width: 18%;
-            float: left;
-            border: 2px solid black;
-            margin-left: 5px;
-            /* Space between the two parts */
+        .writing-right {
+            width: 32%;
+            height: 340px;
+            padding: 8px 6px;
+            text-align: center;
+            position: relative;
         }
 
-        .second_part {
-            width: 79%;
-            float: left;
-            /* border: 2px solid green; */
+        .rx-symbol {
+            width: 28px;
+            height: 28px;
+        }
+
+        .treatment-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .consent-text {
             position: absolute;
+            right: 48px;
+            top: 78%;
+        }
+
+        /* ===== DASH LINE ===== */
+        .dash-line {
+            text-align: center;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            margin: 3px 0;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer-head {
+            background: #000;
+            color: #fff;
+            text-align: center;
+            padding: 4px 2px;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .ward-title {
+            text-align: center;
+            font-weight: bold;
             font-size: 12px;
+            margin: 3px 0;
         }
 
-        .left {
-            width: 38%;
-            float: left;
-            /* border: 2px solid black; */
-            font-size: 12px;
-            padding: 5px;
-            margin-left: 25px;
-            /* Space between the two parts */
+        .footer-box {
+            border: 1.5px solid #000;
+            border-top: none;
+            padding: 5px 7px;
         }
 
-        .right {
-            width: 50%;
-            float: left;
-            padding: 5px;
-            margin-right: 25px;
-            font-size: 12px;
-            /* border: 2px solid green; */
+        .footer-box td {
+            font-size: 11px;
+            line-height: 1.4;
+            padding: 1px 3px;
         }
 
-        /* Clearfix to fix layout issues when using floats */
-        .duble_section::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
-
-        .second_part p {
-            margin-left: 5px;
-
-        }
-
-        .footer_line {
-            position: absolute;
-            top: 45%;
-            left: 72px;
-        }
-
-        .logo img {
-            position: absolute;
-            top: 0px;
-            left: 35px;
-            width: 100px;
-            height: 100px;
-        }
-
-        .details_left p,
-        .details_right p {
-            margin-bottom: 5px;
-            /* Adjust this value for desired spacing */
-        }
-        .second_logo img {
-            position: absolute;
-            top: 10px;
-            right: 35px;
-            width: 100px;
-            height: 100px;
+        .footer-note {
+            font-size: 10px;
+            line-height: 1.35;
         }
     </style>
-
 </head>
-
 <body>
 
-    @php
+@php
+    $user = $users[0] ?? null;
 
-    // Format time from 24-hour to 12-hour format
-    $time = $users[0]['ipd'] ?? '';
-    $formattedTime = \Carbon\Carbon::createFromFormat('H:i:s', $time)->format('h:i A');
-    @endphp
+    $formattedTime = '';
+    if ($user && !empty($user['ipd'])) {
+        try {
+            $formattedTime = \Carbon\Carbon::createFromFormat('H:i:s', $user['ipd'])->format('h:i A');
+        } catch (\Exception $e) {
+            $formattedTime = $user['ipd'] ?? '';
+        }
+    }
 
-    <div class="container-fluid">
-        <div class="pdf-header" style="margin-top: 20px;">
-            <div class="logo">
-                <img src="{{ public_path('img/opd_ipd_logo.jpg') }}" alt="Logo" style="margin-top: 12px;" />
-            </div>
-            <div class="second_logo">
-                <img src="{{ public_path('img/second_logo.jpeg') }}" style="margin-top:10px;"/>
-            </div>
-            <!-- <p>रोगी कल्याण समिति</p> -->
-            <p>Patient Welfare Committee</p>
-            <!-- <p>डॉ.भीमराव अम्बेडकर सामु.स्वा. केन्द्र</p> -->
-            <p>Doctor Bheemrav Ambedkar Civil Hospital</p>
-            <!-- <p>सिवनी मालवा, जिला-नर्मदापुरम (म.प्र.)</p> -->
-            <p>Seoni Malwa, District-Narmadapuram (M.P.)</p>
-            <p>Doctor Bheemrav Ambedkar Civil Hospital - Seoni Malwa,</p>
-            <p>Distt-Narmadapuram (M.P.)</p>
+    $logo1 = public_path('img/opd_ipd_logo.jpg');
+    $logo2 = public_path('img/second_logo.jpeg');
+    $rxImg = public_path('img/aaaa.jpg');
 
-            <!-- <div class="energency_contact">
-                <p>Emergency Call No : 108/100</p>
-            </div> -->
-        </div>
+    $logo1_b64 = file_exists($logo1) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logo1)) : '';
+    $logo2_b64 = file_exists($logo2) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logo2)) : '';
+    $rx_b64    = file_exists($rxImg) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($rxImg)) : '';
+@endphp
 
+@if($user)
 
+<!-- ===== HEADER ===== -->
+<table class="header-table">
+    <tr>
+        <td width="14%" class="text-left">
+            @if($logo1_b64)
+                <img src="{{ $logo1_b64 }}" width="65" height="65">
+            @endif
+        </td>
+        <td width="72%" class="header-center">
+            <div class="charges-line" style="font-size: 14px; color:red">(जनरल चार्जेज :- 10 / इमरजेंसी चार्जेज :- 30) (IPD Amount :- 30)</div>
+                    <div class="header-title" style="font-size: 18px; font-weight:bold">रोगी कल्याण समिति</div>
+                    <div class="header-sub" style="font-size: 18px;">डॉक्टर भीमराव आंबेडकर सिविल हॉस्पिटल</div>
+                    <div class="header-sub" style="font-size: 18px;">सिवनी मालवा, जिला -नर्मदापुरम (म.प्र.)</div>
+                    <div class="header-sub" style="font-size: 18px;">डॉक्टर भीमराव आंबेडकर सिविल हॉस्पिटल सिवनी मालवा</div>
+                    <div class="header-sub" style="font-size: 18px;">जिला -नर्मदापुरम (म.प्र.)</div>
+        </td>
+        <td width="14%" class="text-right">
+            @if($logo2_b64)
+                <img src="{{ $logo2_b64 }}" width="65" height="65">
+            @endif
+        </td>
+    </tr>
+</table>
 
-        <div class="details_section">
-            <!-- <p class="details_section1">बाह्य रोगी पंजीयन</p> -->
-            <p class="details_section1">Inpatient Registration</p>
-            <div class="details" style="padding: 10 6px;">
+<!-- ===== BLACK TITLE ===== -->
+<div class="black-title">Inpatient Registration</div>
 
-                <div class="details_left">
-                    <p>Patient Name : {{$users[0]['pesientname']}}</p>
-                    <p>Age : {{$users[0]['age']}} {{$users[0]['ymd']}}</p>
-                    <p>Address : {{$users[0]['address']}}</p>
-                    <p>Disease : {{$users[0]['desease']}}</p>
-                    <p>MLC/PMLC : {{$users[0]['mlc_pmlc']}}</p>
-                    <p>Ref Dr : {{$users[0]['refered_dr']}}</p>
-                </div>
-                <div class="details_right">
-                    <p>Ipd No: {{$users[0]['ipdno']}} | Opd No : {{$users[0]['opdnumber']}}</p>
-                    <p>Father/Husband Name : {{$users[0]['fatherhusband']}}</p>
-                    <p>Gender : {{$users[0]['gender']}}</p>
-                    <p>Contact No : {{$users[0]['mobileno']}}</p>
-                    <p>Registration date : {{$users[0]['ipd_date']}} {{$formattedTime}}</p>
-                    <p>Fee / Free : {{$users[0]['ipdamount']}}</p>
-                    <p>{{$users[0]['ipdamount_type']}}</p>
-                </div>
+<!-- ===== PATIENT DETAILS ===== -->
+<div class="patient-box">
+    <table>
+        <tr>
+            <td width="52%">
+                <div><span class="label">Patient Name</span> : {{ $user['pesientname'] ?? 'N/A' }}</div>
+                <div><span class="label">Age</span> : {{ $user['age'] ?? 'N/A' }} {{ $user['ymd'] ?? '' }}</div>
+                <div><span class="label">Address</span> : {{ $user['address'] ?? 'N/A' }}</div>
+                <div><span class="label">Disease</span> : {{ $user['desease'] ?? 'N/A' }}</div>
+                <div><span class="label">MLC/PMLC</span> : {{ $user['mlc_pmlc'] ?? 'N/A' }}</div>
+                <div><span class="label">Ref Dr</span> : {{ $user['refered_dr'] ?? 'N/A' }}</div>
+            </td>
+            <td width="48%">
+                <div><span class="label">Ipd No</span> : {{ $user['ipdno'] ?? 'N/A' }} &nbsp;|&nbsp; <span class="label">Opd No</span> : {{ $user['opdnumber'] ?? 'N/A' }}</div>
+                <div><span class="label">Father/Husband Name</span> : {{ $user['fatherhusband'] ?? 'N/A' }}</div>
+                <div><span class="label">Gender</span> : {{ $user['gender'] ?? 'N/A' }}</div>
+                <div><span class="label">Contact No</span> : {{ $user['mobileno'] ?? 'N/A' }}</div>
+                <div><span class="label">Registration date</span> : {{ $user['ipd_date'] ?? 'N/A' }} {{ $formattedTime }}</div>
+                <div><span class="label">Fee / Free</span> : {{ $user['ipdamount'] ?? 'N/A' }}</div>
+                <div><span class="label">{{ $user['ipdamount_type'] ?? 'PAID' }}</span></div>
+            </td>
+        </tr>
+    </table>
+</div>
 
-            </div>
-        </div>
-
-        <div class="main_title" style="padding: 0;"> <!-- Removed unnecessary padding -->
-            <div class="duble_section" style="margin: 0; padding: 0;">
-                <h4 style="margin: 0; padding: 5px 10px;">Diagnosis______________________________________________________________________________</h4>
-                <h4 style="margin: 0; padding: 5px 9px;">Complaint of____________________________________________________________________________</h4>
-                <h4 style="margin: 0; padding: 5px 9px;">History of______________________________________________________________________________</h4>
-            </div>
-        </div>
-
-
-        <div class="writingplace" style="border:1px solid black;width:100%;height:530px;">
-            <div class="leftsidewriteing" style="border-right:2px solid black; width:70%; height:500px;">
-                <img src="{{ public_path('img/aaaa.jpg') }}" style="width:30px; height:30px; margin-top:10px;margin-left:15px;" />
-
-            </div>
-            <p style="position: absolute; right: 43px; top: 38%; white-space: nowrap; font-size:15px;">
-                Treatment Given
-            </p>
-
-        </div>
-
-        <div style="position: fixed; top: 76%;left:58.2%; width: 50%; padding: 10px; text-align: center; font-size:10px;">
-            <p style="line-height: 1.5;">I agree to get myself / my patient admitted</p>
-            <p style="line-height: 1.5;">to the hospital and receive treatment.</p>
-            <p style="line-height: 1.5; margin-top: 18px;">Name and Signature of the Patient / Relative</p>
-        </div>
-
-
-
-        <div class="dash-line" style="margin-top:-5px;">
-            <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
-        </div>
-        <div class="pdfFooter" style="">
-            <p class="pdffooter_line" style="text-align: center; font-size:14px;background-color:black;color:white;">Doctor Bheemrav Ambedkar Civil Hospital - Seoni Malwa(M.P.)</p>
-            <p style="text-align:center">Ward Entry Gate Pass</p>
-            <div class="medicin" style="">
-
-                <div class="left">
-                    <p>Registration date : {{$users[0]['ipd_date']}} {{$formattedTime}}</p>
-                    <p>Patient Name : {{$users[0]['pesientname']}}</p>
-                    <p>Father/Husband Name : {{$users[0]['fatherhusband']}}</p>
-                </div>
-                <div class="right">
-                    <p>Only one attendant will be present with the patient in the ward. The time to visit the patient is from 7 am to 8 am and from 6 pm to 8 pm. Legal action will be taken if entry is made without the card.
-                    </p>
-                </div>
-            </div>
-        </div>
+<!-- ===== DIAGNOSIS / COMPLAINT / HISTORY ===== -->
+<div class="diag-section">
+    <div class="diag-row">
+        Diagnosis <span class="diag-line">_______________________________________________________________________________________________________________</span>
     </div>
-</body>
+    <div class="diag-row">
+        Complaint of <span class="diag-line">____________________________________________________________________________________________________________</span>
+    </div>
+    <div class="diag-row">
+        History of <span class="diag-line">_______________________________________________________________________________________________________________</span>
+    </div>
+</div>
 
+<!-- ===== MAIN WRITING AREA ===== -->
+<table class="writing-table">
+    <tr>
+        <!-- Left: Rx writing space -->
+        <td class="writing-left">
+            @if($rx_b64)
+                <img src="{{ $rx_b64 }}" class="rx-symbol">
+            @else
+                <div style="font-size:22px; font-weight:bold;">Rx</div>
+            @endif
+        </td>
+
+        <!-- Right: Treatment Given + Consent -->
+        <td class="writing-right">
+            <div class="treatment-title">Treatment Given</div>
+
+            <div class="consent-text">
+               मैं स्वयं/अपने मरीज को अस्पताल में भर्ती कराने <br> तथा उपचार प्राप्त करने के लिए सहमत हूँ।.
+                <br><br>
+                <strong>रोगी / परिजन का नाम एवं हस्ताक्षर</strong>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<!-- ===== DASH LINE ===== -->
+<div class="dash-line">
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+</div>
+
+<!-- ===== FOOTER HEAD ===== -->
+<div class="footer-head">
+    डॉ. भीमराव अंबेडकर सामुदायिक स्वास्थ्य केंद्र, सिवनी मालवा, जिला–नर्मदापुरम (म.प्र.)
+</div>
+
+<div class="ward-title">वार्ड प्रवेश द्वार पासs</div>
+
+<!-- ===== FOOTER BOX ===== -->
+<div class="footer-box">
+    <table>
+        <tr>
+            <td width="42%">
+                <div><span class="label">Registration date</span> : {{ $user['ipd_date'] ?? 'N/A' }} {{ $formattedTime }}</div>
+                <div><span class="label">Patient Name</span> : {{ $user['pesientname'] ?? 'N/A' }}</div>
+                <div><span class="label">Father/Husband Name</span> : {{ $user['fatherhusband'] ?? 'N/A' }}</div>
+            </td>
+            <td width="58%" class="footer-note">
+               वार्ड में मरीज के साथ केवल एक परिचारक ही उपस्थित रह सकेगा। मरीज से मिलने का समय प्रातः 7:00 बजे से 8:00 बजे तक तथा शाम 6:00 बजे से 8:00 बजे तक रहेगा। बिना कार्ड के प्रवेश करने पर कानूनी कार्रवाई की जाएगी।
+            </td>
+        </tr>
+    </table>
+</div>
+
+@else
+    <p style="text-align:center; margin-top:40px; font-size:14px;">No patient data found.</p>
+@endif
+
+</body>
 </html>

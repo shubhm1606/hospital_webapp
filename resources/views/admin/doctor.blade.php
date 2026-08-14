@@ -283,8 +283,7 @@
                         console.log('Add doctor response:', res);
                         if (res.status) {
                             alert("Doctor added successfully!");
-                            const addDoctorModal = bootstrap.Modal.getInstance(document.getElementById('modal-default')) || new bootstrap.Modal(document.getElementById('modal-default'));
-                            addDoctorModal.hide();
+                            $("#modal-default").modal("hide");
                             $('#doctor_add')[0].reset();
                             getDoctorList();
                         } else {

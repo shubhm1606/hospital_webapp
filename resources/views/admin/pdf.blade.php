@@ -1,379 +1,474 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Ek+Mukta" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>OPD Slip</title>
     <style>
-        * {
-            margin: 0px;
-            padding: 0px;
-        }
-
         body {
-            /* font-family: 'Noto Sans Devanagari', sans-serif; */
-            font-family: 'Mangal', 'Noto Sans Devanagari', 'Arial Unicode MS', sans-serif;
-
+            font-family: freeserif, DejaVu Sans, sans-serif;
+            font-size: 10px;
+            color: #000;
+            margin: 0;
+            padding: 0;
         }
 
-        .container-fluid {
-            position: absolute;
-            /* border: 1px solid red; */
+        .container {
             width: 100%;
-            top: 0px;
-            /* margin: auto; */
+            border: 1.5px solid #000;
+            padding: 5px 7px;
         }
 
-        .pdf-header {
-            /* border: 1px solid green; */
-            text-align: center;
-            margin-top: 15px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .pdf-header p {
-            margin: 3px 0;
-            font-size: 12px;
-        }
-
-        .registration {
-            position: absolute;
-            top: 100px;
-            right: 130px;
-            text-align: right;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .energency_contact {
-            position: absolute;
-            top: 100px;
-            right: 130px;
-            text-align: right;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .details_section {
-            /* border: 1px solid pink; */
-            /* margin-top: 10px; */
-            padding: 10px;
-            position: relative;
-        }
-
-        .details_section1 {
-            position: absolute;
-            top: 0px;
-            background-color: black;
-            color: white;
-            /* font-weight: bold; */
-            text-align: center;
-            /* width: 100%;
-            padding: 5px; */
-        }
-
-        .details {
-            margin-top: 18px;
-            border: 2px solid black;
-            font-size: 13px;
-            padding: 5px;
-        }
-
-        .details .details_left {
-            display: inline-block;
-            width: 45%;
-        }
-
-        .details .details_right {
-            display: inline-block;
-            width: 45%;
+        td {
             vertical-align: top;
+            padding: 1px 2px;
         }
 
-        .duble_section {
-            /* border: 2px solid pink; */
-            position: relative;
-            margin-top: -12px;
-            height: 560px;
+        .text-center {
+            text-align: center;
         }
 
-        .details_left p,
-        .details_right p {
-            margin-bottom:8px;
-            /* Adjust the value as needed */
+        .text-right {
+            text-align: right;
         }
 
-        .first_part {
-            width: 18%;
-            float: left;
-            border: 2px solid black;
-            margin-left: 5px;
-            height: 560px;
-            /* Space between the two parts */
+        .text-left {
+            text-align: left;
         }
 
-        .first_part ul li {
-            margin-top: 7px;
-            font-size: 12.2px;
+        /* Header */
+        .header-table {
+            width: 100%;
+            border-bottom: 1.5px solid #000;
+            margin-bottom: 3px;
         }
 
-        .second_part {
-            width: 79%;
-            float: left;
-            /* border: 2px solid green; */
-            position: absolute;
+        .header-table img {
+            width: 55px;
+            height: 55px;
+        }
+
+        .charges-line {
+            font-size: 15px;
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .header-sub {
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 1.25;
+        }
+
+        .reg-no {
+            font-size: 11px;
+            font-weight: bold;
+            text-align: right;
+            margin: 2px 0;
+        }
+
+        /* Black Title */
+        .black-title {
+            background: #fff;
+            color: #000;
+            text-align: center;
+            font-weight: bold;
+            padding: 3px 0;
             font-size: 12px;
+            margin: 3px 0;
         }
 
-        .left {
-            width: 35%;
-            float: left;
-            /* border: 2px solid black; */
+        /* Patient Box */
+        .patient-box {
+            border: 1.5px solid #000;
+            padding: 4px 6px;
+            margin-bottom: 4px;
+        }
+
+        .patient-box td {
+            font-size: 14px;
+            line-height: 1.4;
+            padding: 1px 3px;
+        }
+
+        .label {
+            font-weight: bold;
+            min-width: 95px;
+            display: inline-block;
+        }
+
+        .fee-tag {
+            background: #eee;
+            padding: 1px 4px;
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        /* Main 2 Column */
+        .main-table {
+            width: 100%;
+            border: 1.5px solid #000;
+            margin-bottom: 4px;
+            /* pehle 330px tha, hata diya */
+        }
+
+        .test-box {
+            width: 23%;
+            border-right: 1.5px solid #000;
+            padding: 4px 5px;
+            font-size: 2px;
+        }
+
+        .inv-title {
+            font-weight: bold;
+            font-size: 15px;
+            border-bottom: 1px solid #000;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+        }
+
+        .inv-item {
+            font-size: 16.6px;
+            margin-top: 12px;
+            padding: 2px 2px;
+        }
+
+        .rx-box {
+            width: 73%;
+            padding: 4px 8px 15px 8px;
+            height: 560px;
+            /* ← Height yahan se control hogi */
+        }
+
+        .field-label {
+            font-weight: bold;
+            font-size: 10.5px;
+            margin-top: 5px;
+            margin-bottom: 2px;
+        }
+
+        .treatment-title {
+            font-weight: bold;
+            font-size: 13px;
+            margin: 8px 0 5px 0;
+        }
+
+        .treatment-title img {
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .valid-note {
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+            margin-top: 100px;
+            padding-top: 5px;
+
+        }
+
+        /* Timing */
+        .timing-bar {
+            text-align: center;
+            font-size: 9.5px;
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #000;
+            padding: 3px 0;
+            margin: 3px 0;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer-head {
+            background: #fff;
+            color: #000;
+            text-align: center;
+            padding: 4px 2px;
+            font-weight: bold;
+            font-size: 10px;
+            line-height: 1.35;
+        }
+
+        .footer-box {
+            border: 1.5px solid #000;
+            border-top: none;
+        }
+
+        .footer-box td {
+            font-size: 17px;
+            line-height: 1.4;
+            padding: 2px 4px;
+        }
+
+        .f-label {
+            font-weight: bold;
+            min-width: 105px;
+            display: inline-block;
+
+        }
+
+        .footer-right {
+            border-left: 1.5px solid #000;
+            padding-left: 8px;
+        }
+
+        .med-title {
+            font-weight: bold;
             font-size: 12px;
-            padding: 5px;
-            margin-left: 18px;
-            /* border: 1px solid green; */
-            /* Space between the two parts */
+            margin-bottom: 4px;
         }
 
-        .right {
-            width: 59%;
-            float: left;
-            /* border: 1px solid red; */
-            /* border: 2px solid green; */
+        .med-title img {
+            width: 22px;
+            height: 22px;
+            vertical-align: middle;
+            margin-right: 4px;
         }
 
-        /* Clearfix to fix layout issues when using floats */
-        .duble_section::after {
-            content: "";
-            clear: both;
-            display: table;
+        .doctor-sig {
+            text-align: right;
+            margin-top: 8px;
+            font-size: 9.5px;
+            font-weight: bold;
         }
 
-        .second_part p {
-            margin-left: 5px;
-
-        }
-
-        .footer_line {
-            position: absolute;
-            top: 96%;
-            left: 72px;
-        }
-
-        .logo img {
-            position: absolute;
-            top: 0px;
-            left: 35px;
-            width: 100px;
-            height: 100px;
-        }
-        .second_logo img {
-            position: absolute;
-            top: 10px;
-            right: 35px;
-            width: 100px;
-            height: 100px;
-        }
-        img {
-            background: transparent !important;
-        }
-        .test{
-            margin-top:11px;
+        .sig-line {
+            display: inline-block;
+            width: 120px;
+            margin-right: 5px;
         }
     </style>
-
 </head>
 
 <body>
 
-    <div class="container-fluid">
-        <div class="pdf-header">
-            <div class="logo">
-                <img src="{{ public_path('img/opd_ipd_logo.jpg') }}" style="margin-top:10px;"/>
-            </div>
-            <div class="second_logo">
-                <img src="{{ public_path('img/second_logo.jpeg') }}" style="margin-top:10px;"/>
-            </div>
-            <p style="color:red">(Gerneral Charges :- 10 / Emergency Charges :- 30)((IPD Amount :30))</p>
-            <!-- <p>रोगी कल्याण समिति</p> -->
-            <p>Patient Welfare Committee</p>
-            <!-- <p>डॉ.भीमराव अम्बेडकर सामु.स्वा. केन्द्र</p> -->
-            <p>Doctor Bheemrav Ambedkar Civil Hospital</p>
-            <!-- <p>सिवनी मालवा, जिला-नर्मदापुरम (म.प्र.)</p> -->
-            <p>Seoni Malwa, District-Narmadapuram (M.P.)</p>
-            <p>Doctor Bheemrav Ambedkar Civil Hospital - Seoni Malwa,</p>
-            <p>Distt-Narmadapuram (M.P.)</p>
-            <div class="registration"style="margin-top:10px;">
-                @if($lastEntry)
-                <p>Registration No: {{$lastEntry->opdId}}/228390</p>
-                @else
-                <p>Registration No: 12345</p>
-                @endif
-            </div>
-            <!-- <div class="energency_contact" style="margin-top:13px;">
-                <p>Emergency Call No : 108/100</p>
-            </div> -->
-        </div>
-
-        @if($lastEntry)
     @php
-        // Format time from 24-hour to 12-hour format
-        $time = $lastEntry->ptime ?? '';
-        $formattedTime = $time ? \Carbon\Carbon::createFromFormat('H:i:s', $time)->format('h:i A') : '';
+    // Safe variables
+    $formattedTime = '';
+    $res = '';
 
-        // Assign the correct label for free_option
-        $free_option = $lastEntry->free_option ?? '';
+    if ($lastEntry) {
+    $time = $lastEntry->ptime ?? '';
+    if ($time) {
+    try {
+    $formattedTime = \Carbon\Carbon::createFromFormat('H:i:s', $time)->format('h:i A');
+    } catch (\Exception $e) {
+    $formattedTime = $time;
+    }
+    }
 
-        switch ($free_option) {
-            case 'aayushmaan':
-                $res = 'AayushMaan';
-                break;
-            case '100_dial':
-                $res = '100 Dial';
-                break;
-            case 'janani_express':
-                $res = 'Janani Express';
-                break;
-            case 'staff':
-                $res = 'STAFF';
-                break;
-            default:
-                $res = $free_option; // If no match, show original value
-        }
+    $free_option = $lastEntry->free_option ?? '';
+    switch ($free_option) {
+    case 'aayushmaan': $res = 'AayushMaan'; break;
+    case '100_dial': $res = '100 Dial'; break;
+    case 'janani_express': $res = 'Janani Express'; break;
+    case 'staff': $res = 'STAFF'; break;
+    default: $res = $free_option;
+    }
+    }
+
+    // Images as base64 (most reliable for mPDF)
+    $logo1 = public_path('img/opd_ipd_logo.jpg');
+    $logo2 = public_path('img/second_logo.jpeg');
+    $rxImg = public_path('img/aaaa.jpg');
+
+    $logo1_b64 = file_exists($logo1) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logo1)) : '';
+    $logo2_b64 = file_exists($logo2) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logo2)) : '';
+    $rx_b64 = file_exists($rxImg) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($rxImg)) : '';
     @endphp
 
+    <div class="container">
 
-
-        <div class="details_section">
-            <!-- <p class="details_section1">बाह्य रोगी पंजीयन</p> -->
-            <p class="details_section1">Patient registration</p>
-            <div class="details" style="">
-                <div class="details_left"style="margin-top:15px !important;">
-                    <strong><p>Patient Name : {{ $lastEntry->pesientname ?? '' }}</p> </strong>
-                    <strong><p>Age : {{ $lastEntry->age ?? '' }} {{ $lastEntry->ymd ?? '' }}</p></strong>
-                    <strong><p>Address : {{ $lastEntry->address ?? '' }}</p></strong>
-                    <strong><p>Disease : {{ $lastEntry->desease ?? '' }}</p></strong>
-                    <strong><p>MLC/PMLC : {{ $lastEntry->mlc_pmlc ?? '' }}</p></strong>
-                </div>
-                <div class="details_right">
-                <strong><p>Father/Husband Name : {{ $lastEntry->fatherhusband ?? '' }}</p></strong>
-                <strong><p>Gender : {{ $lastEntry->gender ?? '' }}</p></strong>
-                <strong><p>Contact No : {{ $lastEntry->mobileno ?? '' }}</p></strong>
-                <strong> <p>Registration date : {{ $lastEntry->pdate ?? '' }},{{ $formattedTime }}</p></strong>
-                <strong>
-                    @if($lastEntry->chargesamount == 10)
-                        <p>Fee / Free : {{ $lastEntry->chargesamount ?? '' }} rs {{ $res }} (GENERAL CHARGES)</p>
-                    @else
-                        <p>Fee / Free : {{ $lastEntry->chargesamount ?? '' }} rs {{ $res }} (EMERGENCY CHARGES)</p>
+        <!-- HEADER -->
+        <table class="header-table">
+            <tr>
+                <td width="12%" class="text-left">
+                    @if($logo1_b64)
+                    <img src="{{ $logo1_b64 }}" width="85" height="85">
                     @endif
+                </td>
+                <td width="76%" class="text-center">
+                    <div class="charges-line">(जनरल चार्जेज :- 10 / इमरजेंसी चार्जेज :- 30) (IPD Amount :- 30)</div>
+                    <div class="header-title">रोगी कल्याण समिति</div>
+                    <div class="header-sub">डॉक्टर भीमराव आंबेडकर सिविल हॉस्पिटल</div>
+                    <div class="header-sub">सिवनी मालवा, जिला -नर्मदापुरम (म.प्र.)</div>
+                    <div class="header-sub">डॉक्टर भीमराव आंबेडकर सिविल हॉस्पिटल सिवनी मालवा</div>
+                    <div class="header-sub">जिला -नर्मदापुरम (म.प्र.)</div>
+                </td>
+                <td width="12%" class="text-right">
+                    @if($logo2_b64)
+                    <img src="{{ $logo2_b64 }}" width="85" height="85">
+                    @endif
+                </td>
+            </tr>
+        </table>
 
-                    <!-- <p>Fee / Free : {{ $lastEntry->chargesamount ?? '' }} rs {{ $res }}</p> -->
-                </strong>
-                <strong><p>{{ $lastEntry->charges ?? '' }}</p></strong>
-                </div>
-            </div>
+        <!-- Registration No -->
+        <div class="reg-no">
+            Registration No : <strong>{{ $lastEntry->opdId ?? 'N/A' }}/228390</strong>
         </div>
-        @else
-        <p>No last entries found.</p>
-        @endif
 
+        <!-- Title -->
+        <div class="black-title">PATIENT REGISTRATION</div>
 
-
-        <div class="duble_section">
-            <div class="first_part">
-                <ul style="margin-left:10px;list-style:none;font-size:11px">
-                    <li>[ ] ECG</li>
-                    <li>[ ] USG </li>
-                    <li>[ ] BMP </li>
-                    <li>[ ] X-RAY </li>
-                    <li>[ ] Acid-fast bacilus(AFB) </li>
-                    <li>[ ] CBC </li>
-                    <li>[ ] Hb </li>
-                    <li>[ ] T and D </li>
-                    <li>[ ] Pallets Count </li>
-                    <li>[ ] Blood Presure(BP) </li>
-                    <li>[ ] Blood group-Rh Factor </li>
-                    <li>[ ] BTCT </li>
-                    <li>[ ] Blood Sugar Fasting </li>
-                    <li>[ ] Blood Sugar P.P. </li>
-                    <li>[ ] Blood Sugar R. </li>
-                    <li>[ ] Serum Creatinine </li>
-                    <li>[ ] Blood Urea </li>
-                    <li>[ ] Serum Bilrubin </li>
-                    <li>[ ] Uric Acid </li>
-                    <li>[ ] WIDAL </li>
-                    <li>[ ] Aust. Antigen(HbSag) </li>
-                    <li>[ ] Urin Pregnancy Test </li>
-                    <li>[ ] Urine Test R and M </li>
-                    <li>[ ] ESR </li>
-                </ul>
-            </div>
-
-            <div class="second_part">
-                <p class="test p1">Brief History :</p>
-                <p class="test p2">G/E :</p>
-                <p class="test p3"> Presumptive/Definite Diagnosis :</p>
-                <p class="footer_line">This slip is valid for 7 days. After 7 days, a second slip is mandatory</p>
-                <img src="{{ public_path('img/aaaa.jpg') }}" style="width:30px; height:30px; margin-top:10px;margin-left:15px;" />
-                <p style="margin-left:65px; margin-top:-30px;text-align:center">Treatment Advised</p>
-            </div>
+        <!-- Patient Details -->
+        <div class="patient-box">
+            <table>
+                <tr>
+                    <td width="50%">
+                        <div><span class="label">Patient Name</span> : {{ $lastEntry->pesientname ?? 'N/A' }}</div>
+                        <div><span class="label">Age</span> : {{ $lastEntry->age ?? 'N/A' }} {{ $lastEntry->ymd ?? '' }}</div>
+                        <div><span class="label">Address</span> : {{ $lastEntry->address ?? 'N/A' }}</div>
+                        <div><span class="label">Disease</span> : {{ $lastEntry->desease ?? 'N/A' }}</div>
+                        <div><span class="label">MLC / PMLC</span> : {{ $lastEntry->mlc_pmlc ?? 'N/A' }}</div>
+                    </td>
+                    <td width="50%">
+                        <div><span class="label">Father/Husband</span> : {{ $lastEntry->fatherhusband ?? 'N/A' }}</div>
+                        <div><span class="label">Gender</span> : {{ $lastEntry->gender ?? 'N/A' }}</div>
+                        <div><span class="label">Contact No</span> : {{ $lastEntry->mobileno ?? 'N/A' }}</div>
+                        <div><span class="label">Registration Date</span> : {{ $lastEntry->pdate ?? 'N/A' }} {{ $formattedTime }}</div>
+                        <div>
+                            <span class="label">Fee / Free</span> :
+                            ₹{{ $lastEntry->chargesamount ?? '0' }}
+                            @if(($lastEntry->chargesamount ?? 0) == 10) (GENERAL) @else (EMERGENCY) @endif
+                            @if($res) <span class="fee-tag">{{ $res }}</span> @endif
+                        </div>
+                        <div><span class="label">Charges</span> : {{ $lastEntry->charges ?? '' }}</div>
+                    </td>
+                </tr>
+            </table>
         </div>
-        <hr style="width: 100%; color:black" />
-        <div class="timetable" style="font-size:13px;">
-            <p style="text-align:center">OPD timings are from 9.00 am to 2.00 pm and from 5.00 pm to 6.00 pm.</p>
-        </div>
-        <div class="dash-line" style="margin-top:-5px;">
-            <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
-        </div>
-        <div class="pdfFooter" style="">
-            <p class="pdffooter_line" style="text-align: center; font-size:14px;background-color:black;color:white;">Doctor Bheemrav Ambedkar Civil Hospital - Seoni Malwa, District-Narmadapuram (M.P.) - Free Medicine Distribution Center</p>
-            <div class="medicin" style="">
-                @if($lastEntry)
-                @php
-                // Format time from 24-hour to 12-hour format
-                $time = $lastEntry->ptime ?? '';
-                $formattedTime = \Carbon\Carbon::createFromFormat('H:i:s', $time)->format('h:i A');
-                @endphp
-                <div class="left" style="font-family: Arial, sans-serif; font-size: 12px; line-height: 1.5;">
-                    <strong><p>External Registration Co :- {{ $lastEntry->opdId ?? '' }}<<strong>
-                    <strong><p>Registration date :- {{ $lastEntry->pdate ?? '' }}, {{ $formattedTime }}<<strong>
-                    <strong><p>Patient Name :- {{ $lastEntry->pesientname ?? '' }}<<strong>
-                    <strong><p>Father/Husband Name :- {{ $lastEntry->fatherhusband ?? '' }}<<strong>
-                    <strong><p>Mobile Number :- {{ $lastEntry->mobileno ?? '' }}<<strong>
-                    <strong><p>Age/Gender :- {{ $lastEntry->age ?? '' }} {{ $lastEntry->gender ?? '' }} {{ $lastEntry->ymd ?? '' }}<<strong>
-                    <strong><p>Address :- {{ $lastEntry->address ?? '' }}<<strong>
-                    <strong><p>Disease :- {{ $lastEntry->desease ?? '' }}<<strong>
-                </div>
 
-                @else
-                <div class="left">
-                    <p>External Registration Co : </p>
-                    <p>Registration date : </p>
-                    <p>Patient Name : </p>
-                    <p>Father/Husband Name : </p>
-                    <p>Mobile Number : </p>
-                    <p>Age/Gender : </p>
-                    <p>Address : </p>
-                    <p>Disease : </p>
-                </div>
-                @endif
+        <!-- Investigation + Rx -->
+        <table class="main-table">
+            <tr>
+                <td class="test-box">
+                    <div class="inv-title">Investigation</div>
+                    <div class="inv-item">[ ] ECG</div>
+                    <div class="inv-item">[ ] USG</div>
+                    <div class="inv-item">[ ] BMP</div>
+                    <div class="inv-item">[ ] X-RAY</div>
+                    <div class="inv-item">[ ] Acid-fast Bacillus (AFB)</div>
+                    <div class="inv-item">[ ] CBC</div>
+                    <div class="inv-item">[ ] Hb</div>
+                    <div class="inv-item">[ ] T &amp; D</div>
+                    <div class="inv-item">[ ] Platelets Count</div>
+                    <div class="inv-item">[ ] Blood Pressure (BP)</div>
+                    <div class="inv-item">[ ] Blood Group / Rh Factor</div>
+                    <div class="inv-item">[ ] BT / CT</div>
+                    <div class="inv-item">[ ] Blood Sugar Fasting</div>
+                    <div class="inv-item">[ ] Blood Sugar PP</div>
+                    <div class="inv-item">[ ] Blood Sugar Random</div>
+                    <div class="inv-item">[ ] Serum Creatinine</div>
+                    <div class="inv-item">[ ] Blood Urea</div>
+                    <div class="inv-item">[ ] Serum Bilirubin</div>
+                    <div class="inv-item">[ ] Uric Acid</div>
+                    <div class="inv-item">[ ] WIDAL</div>
+                    <div class="inv-item">[ ] HBsAg</div>
+                    <div class="inv-item">[ ] Urine Pregnancy Test</div>
+                    <div class="inv-item">[ ] Urine R/M</div>
+                    <div class="inv-item">[ ] ESR</div>
+                </td>
 
-                <div class="right">
-                    <img src="{{ public_path('img/aaaa.jpg') }}" style="width:25px; height:25px; margin-top:10px;margin-left:15px;" />
-                    <div class="footerdashline">
-                        <p style="margin-left:55px; margin-top:-15px">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
-                        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
-                        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
-                        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
-                        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
-                        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
-                        <p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
+                <td class="rx-box">
+                    <div class="field-label">Brief History :</div>
+                    <div class="write-line"></div>
+                    <div class="write-line"></div>
+
+                    <div class="field-label">G / E :</div>
+                    <div class="write-line"></div>
+
+                    <div class="field-label">Presumptive / Definite Diagnosis :</div>
+                    <div class="write-line"></div>
+                    <div class="write-line"></div>
+
+                    <div class="treatment-title">
+                        @if($rx_b64)
+                        <img src="{{ $rx_b64 }}" width="24" height="24">
+                        @endif
+
                     </div>
-                </div>
-            </div>
+
+                    <div class="write-line"></div>
+                    <div class="write-line"></div>
+                    <div class="write-line"></div>
+                    <div class="write-line"></div>
+                    <div class="write-line"></div>
+                    <div class="write-line"></div>
+                    <div class="write-line"></div>
+                    <div class="write-line"></div>
+                    <div class="write-line"></div>
+                    <div class="write-line"></div>
+
+                    <div class="valid-note" style="margin-top: 20px;">
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Timing -->
+        <div class="timing-bar">
+            This slip is valid for 7 days. After 7 days, second slip is mandatory. ||
+            OPD Timings : 09:00 AM to 02:00 PM &nbsp;&nbsp;|&nbsp;&nbsp; Evening : 05:00 PM to 06:00 PM
         </div>
+
+        <!-- Footer Head -->
+        <div class="footer-head">
+            डॉक्टर भीमराव आंबेडकर सिविल हॉस्पिटल - सिवनी मालवा, जिला-नर्मदापुरम (म.प्र.)
+            <br>निःशुल्क औषधि वितरण केंद्र
+        </div>
+
+        <!-- Footer Box -->
+        <div class="footer-box">
+            <table>
+                <tr>
+                    <td width="42%">
+                        <div><span class="f-label">Registration No</span> : {{ $lastEntry->opdId ?? 'N/A' }}</div>
+                        <div><span class="f-label">Registration Date</span> : {{ $lastEntry->pdate ?? 'N/A' }} {{ $formattedTime }}</div>
+                        <div><span class="f-label">Patient Name</span> : {{ $lastEntry->pesientname ?? 'N/A' }}</div>
+                        <div><span class="f-label">Father / Husband</span> : {{ $lastEntry->fatherhusband ?? 'N/A' }}</div>
+                        <div><span class="f-label">Mobile</span> : {{ $lastEntry->mobileno ?? 'N/A' }}</div>
+                        <div><span class="f-label">Age / Gender</span> : {{ $lastEntry->age ?? 'N/A' }} {{ $lastEntry->ymd ?? '' }} / {{ $lastEntry->gender ?? 'N/A' }}</div>
+                        <div><span class="f-label">Address</span> : {{ $lastEntry->address ?? 'N/A' }}</div>
+                        <div><span class="f-label">Disease</span> : {{ $lastEntry->desease ?? 'N/A' }}</div>
+                    </td>
+                    <td width="58%" class="footer-right">
+                        <div class="med-title">
+                            @if($rx_b64)
+                            <img src="{{ $rx_b64 }}" width="22" height="22">
+                            @endif
+
+                        </div>
+                        <div class="write-line">_______________________________________________________________________________________</div>
+                        <div class="write-line">_______________________________________________________________________________________</div>
+                        <div class="write-line">_______________________________________________________________________________________</div>
+                        <div class="write-line">_______________________________________________________________________________________</div>
+                        <div class="write-line">_______________________________________________________________________________________</div>
+                        <div class="write-line">_______________________________________________________________________________________</div>
+                        <div class="write-line">_______________________________________________________________________________________</div>
+
+                        <div class="doctor-sig">
+                            <span class="sig-line">__________________________________________________________________________________________________________________________________________</span> Doctor Signature
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
     </div>
+
 </body>
 
 </html>

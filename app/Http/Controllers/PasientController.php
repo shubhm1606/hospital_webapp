@@ -8,7 +8,7 @@ use App\Models\pasient_details;
 use App\Models\IpdDetails;
 use App\Models\Emergency;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use DB;
 
 class PasientController extends Controller
 {
@@ -23,7 +23,7 @@ class PasientController extends Controller
                 'pesientname' => $request->patient_name,
                 'gender' => $request->gender,
                 'age' =>  $request->age,
-                'fatherhusband' => $request->father_husband_name,
+                'fatherhusband' => $request->relation . ' ' . $request->father_husband_name,
                 'mobileno' =>  $request->mobile_no,
                 'address' =>  $request->address,
                 'area' =>  $request->area,
@@ -127,14 +127,72 @@ class PasientController extends Controller
         }
     }
 
+    // public function pdfdownloade()
+    // {
+    //     $lastEntry = pasient_details::latest()->first();
+    //     if (!$lastEntry) {
+    //         return back()->with('error', 'No data available!');
+    //     }
+    //     $pdf = Pdf::loadView('admin.pdf', compact('lastEntry'));
+    //     return $pdf->stream('details.pdf');
+    // }
+
+    // public function pdfdownloade()
+    // {
+    //     $lastEntry = pasient_details::latest()->first();
+
+    //     if (!$lastEntry) {
+    //         return back()->with('error', 'No data available!');
+    //     }
+
+    //     // return view('admin.pdf', compact('lastEntry'));
+
+    //     $mpdf = new \Mpdf\Mpdf([
+    //         'mode' => 'utf-8',
+    //         'format' => 'A4',
+    //         'default_font' => 'freeserif',
+    //         'autoScriptToLang' => true,
+    //         'autoLangToFont' => true,
+    //     ]);
+
+    //     $mpdf->SetFont('freeserif', '', 16);
+
+    //     // Blade view ko HTML mein convert karein
+    //     $html = view('admin.pdf', compact('lastEntry'));
+
+
+    //     $mpdf->WriteHTML($html);
+
+    //     return $mpdf->Output('details.pdf', 'I');
+    // }
+
+
     public function pdfdownloade()
     {
         $lastEntry = pasient_details::latest()->first();
+
         if (!$lastEntry) {
             return back()->with('error', 'No data available!');
         }
-        $pdf = Pdf::loadView('admin.pdf', compact('lastEntry'));
-        return $pdf->stream('details.pdf');
+
+        $mpdf = new \Mpdf\Mpdf([
+            'mode'              => 'utf-8',
+            'format'            => 'A4',
+            'default_font'      => 'freeserif',
+            'autoScriptToLang'  => true,
+            'autoLangToFont'    => true,
+            'margin_left'       => 6,
+            'margin_right'      => 6,
+            'margin_top'        => 5,
+            'margin_bottom'     => 5,
+        ]);
+
+        // Very important → convert View to HTML string
+        $html = view('admin.pdf', compact('lastEntry'))->render();
+
+        $mpdf->WriteHTML($html);
+
+        return $mpdf->Output('details.pdf', 'I');
     }
 
     public function ipdformsubmit(Request $request)
@@ -175,26 +233,70 @@ class PasientController extends Controller
         }
     }
 
+    // public function ipdpdf(Request $request)
+    // {
+
+    //     $lastEntry = IpdDetails::orderBy('sno', 'desc')->first();
+    //     $opdNumber = $lastEntry->opdnumber;
+
+    //     if (!$lastEntry) {
+    //         return abort(404, 'No IpdDetails entry found.');
+    //     }
+
+
+    //     $users = pasient_details::join('ipd_details', 'pasient_details.opdId', '=', 'ipd_details.opdnumber')
+    //         ->where('ipd_details.opdnumber', $opdNumber)
+    //         ->orderBy('ipd_details.created_at', 'desc')
+    //         ->select('pasient_details.*', 'ipd_details.*')
+    //         ->get();
+    //     // dd($users);
+    //     // return view('admin.ipdpdf',compact('users'));
+    //     $pdf = Pdf::loadView('admin.ipdpdf', compact('users'));
+    //     return $pdf->stream('details.pdf');
+    // }
+
     public function ipdpdf(Request $request)
     {
-
+        // Latest IPD entry
         $lastEntry = IpdDetails::orderBy('sno', 'desc')->first();
-        $opdNumber = $lastEntry->opdnumber;
 
         if (!$lastEntry) {
-            return abort(404, 'No IpdDetails entry found.');
+            return abort(404, 'No IPD Details entry found.');
         }
 
+        $opdNumber = $lastEntry->opdnumber;
 
+        // Join se data
         $users = pasient_details::join('ipd_details', 'pasient_details.opdId', '=', 'ipd_details.opdnumber')
             ->where('ipd_details.opdnumber', $opdNumber)
             ->orderBy('ipd_details.created_at', 'desc')
             ->select('pasient_details.*', 'ipd_details.*')
             ->get();
-        // dd($users);
-        // return view('admin.ipdpdf',compact('users'));
-        $pdf = Pdf::loadView('admin.ipdpdf', compact('users'));
-        return $pdf->stream('details.pdf');
+
+        if ($users->isEmpty()) {
+            return abort(404, 'No patient data found for this IPD.');
+        }
+
+        // ========== mPDF Setup ==========
+        $mpdf = new \Mpdf\Mpdf([
+            'mode'              => 'utf-8',
+            'format'            => 'A4',
+            'default_font'      => 'freeserif',
+            'autoScriptToLang'  => true,
+            'autoLangToFont'    => true,
+            'margin_left'       => 8,
+            'margin_right'      => 8,
+            'margin_top'        => 7,
+            'margin_bottom'     => 7,
+        ]);
+
+        // Blade ko HTML string me convert karo (important)
+        $html = view('admin.ipdpdf', compact('users'))->render();
+
+        $mpdf->WriteHTML($html);
+
+        // PDF browser me open karega
+        return $mpdf->Output('IPD_Registration.pdf', 'I');
     }
 
     public function exceldata(Request $request)
@@ -421,13 +523,83 @@ class PasientController extends Controller
 
     public function getopdLIst(Request $request)
     {
-        $opdDatafetch = pasient_details::orderBy('sno', 'desc')->get();
-        return response()->json([
-            'status' => true,
-            'message' => 'OPD data fetched successfully',
-            'data' => $opdDatafetch
-        ]);
+        try {
+            // Get DataTables parameters
+            $draw = $request->input('draw');
+            $start = $request->input('start', 0);
+            $length = $request->input('length', 10);
+            $searchValue = $request->input('search.value', '');
+            $orderColumnIndex = $request->input('order.0.column', 0);
+            $orderDirection = $request->input('order.0.dir', 'asc');
+            
+            // Define sortable columns
+            $columns = ['id', 'opdId', 'pesientname', 'fatherhusband', 'mobileno', 'desease', 'pdate'];
+            $orderBy = $columns[$orderColumnIndex] ?? 'id';
+            
+            // Build query
+            $query = DB::table('pasient_details');
+            
+            // Apply search filter
+            if (!empty($searchValue)) {
+                $query->where(function($q) use ($searchValue) {
+                    $q->where('opdId', 'LIKE', "%{$searchValue}%")
+                      ->orWhere('pesientname', 'LIKE', "%{$searchValue}%")
+                      ->orWhere('fatherhusband', 'LIKE', "%{$searchValue}%")
+                      ->orWhere('mobileno', 'LIKE', "%{$searchValue}%")
+                      ->orWhere('desease', 'LIKE', "%{$searchValue}%")
+                      ->orWhere('pdate', 'LIKE', "%{$searchValue}%");
+                });
+            }
+            
+            // Get total count (without filter)
+            $totalRecords = DB::table('pasient_details')->count();
+            
+            // Get filtered count
+            $filteredRecords = $query->count();
+            
+            // Apply sorting and pagination
+            $data = $query->orderBy($orderBy, $orderDirection)
+                         ->skip($start)
+                         ->take($length)
+                         ->get();
+            
+            // Format data for DataTables
+            $formattedData = [];
+            foreach ($data as $index => $item) {
+                $formattedData[] = [
+                    'sno' => $start + $index + 1,
+                    'opdId' => $item->opdId ?? '—',
+                    'pesientname' => $item->pesientname ?? '—',
+                    'fatherhusband' => $item->fatherhusband ?? '—',
+                    'mobileno' => $item->mobileno ?? '—',
+                    'desease' => $item->desease ?? '—',
+                    'pdate' => $item->pdate ?? '—',
+                    'action' => '<button class="btn btn-primary btn-sm" onclick="reentry(' . ($item->opdId ?? 0) . ')">Re-Entry</button>'
+                ];
+            }
+            
+            return response()->json([
+                'draw' => intval($draw),
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $filteredRecords,
+                'data' => $formattedData,
+                'status' => true,
+                'message' => 'OPD data fetched successfully'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'draw' => intval($request->input('draw', 0)),
+                'recordsTotal' => 0,
+                'recordsFiltered' => 0,
+                'data' => [],
+                'status' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ]);
+        }
     }
+
+    
 
     public function reentry($id)
     {
@@ -436,5 +608,4 @@ class PasientController extends Controller
         // dd( $details);
         return view('admin.from', compact('details'));
     }
-    
 }
