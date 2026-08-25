@@ -49,11 +49,13 @@
                         <i class="bi bi-circle"></i><span>LIST</span>
                     </a>
                 </li>
-                <li>
-                    <a href="{{route('index.doctor')}}">
-                        <i class="bi bi-circle"></i><span>Doctor</span>
-                    </a>
-                </li>
+                @if(Auth::user()->role === 'admin')
+                    <li>
+                        <a href="{{ route('index.doctor') }}">
+                            <i class="bi bi-circle"></i><span>Doctor</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </li><!-- End Settings Dropdown -->
 

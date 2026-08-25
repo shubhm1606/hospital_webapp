@@ -148,7 +148,7 @@
                                         <i class="bi bi-currency-dollar"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6></h6>
+                                        <h6>{{ $generalmedicineCount }}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -168,7 +168,7 @@
                                         <i class="bi bi-currency-dollar"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6></h6>
+                                        <h6>{{ $anccheckupCount }}</h6>
                 
 
                                     </div>
@@ -190,7 +190,7 @@
                                         <i class="bi bi-currency-dollar"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6></h6>
+                                        <h6>{{ $rtaaccidentCount }}</h6>
                 
 
                                     </div>
@@ -211,7 +211,7 @@
                                         <i class="bi bi-currency-dollar"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6></h6>
+                                        <h6>{{ $poisoningCount }}</h6>
                 
 
                                     </div>
@@ -233,7 +233,7 @@
                                         <i class="bi bi-currency-dollar"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6></h6>
+                                        <h6>{{ $orthopedicCount }}</h6>
                 
 
                                     </div>
@@ -255,7 +255,7 @@
                                         <i class="bi bi-currency-dollar"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6></h6>
+                                        <h6>{{ $antirabiesCount }}</h6>
                 
 
                                     </div>
@@ -296,6 +296,7 @@
 
 </main><!-- End #main -->
 <script>
+   const BASE_URL = "{{ url('/') }}";
    document.addEventListener("DOMContentLoaded", function () {
     let form = document.getElementById("checkemergency");
 
@@ -312,7 +313,7 @@
             let formData = new FormData();
             formData.append("emergency", emergencyValue);
 
-            fetch("http://localhost/laravel_setup/checkemergency", {
+          fetch(`${BASE_URL}/checkemergency`, {
                 method: "POST",
                 headers: {
                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")

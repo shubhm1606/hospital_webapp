@@ -211,7 +211,7 @@
                         <div class="text-center mt-4">
                             <!-- <button type="button" id="newEntery" class="btn btn-warning">New Pesient</button> -->
                             <button type="button" id="submitBtn" class="btn btn-info">Save</button>
-                            <button type="button" id="pdfprint" class="btn btn-warning">Print</button>
+                            <button type="button" id="pdfprint" class="btn btn-warning" disabled>Print PDF</button>
                             <!-- <button type="button" class="btn btn-info" id="pdfButton">Print PDF</button> -->
                             <iframe id="pdfFrame" style="display: none;"></iframe>
                         </div>
