@@ -15,40 +15,59 @@ class PasientController extends Controller
 
     public function fromsubmit(Request $request)
     {
-        // dd($request->all());
-        $ptime = \Carbon\Carbon::createFromFormat('h:i:s A', $request->time)->format('H:i:s');
-        $post = DB::transaction(function () use ($request, $ptime) {
-            $opdId = $this->nextDocumentNumber('opd');
+        $opdId = trim((string) $request->input('opd_id', ''));
+        $timeValue = $request->input('time');
+        $ptime = $this->normalizeTimeValue($timeValue);
+        $currentTag = $request->input('tags', Emergency::value('emergency') === 'yes' ? 'emergency' : 'general');
+
+        $patientData = [
+            'pesientname' => $request->patient_name,
+            'gender' => $request->gender,
+            'age' => $request->age,
+            'fatherhusband' => $request->relation ? ($request->relation . ' ' . $request->father_husband_name) : $request->father_husband_name,
+            'mobileno' => $request->mobile_no,
+            'address' => $request->address,
+            'area' => $request->area,
+            'caste' => $request->caste,
+            'desease' => $request->disease,
+            'mlc_pmlc' => $request->mlc_pmlc,
+            'charges' => $request->input('charges', null),
+            'chargesamount' => $request->input('charge_amount', null),
+            'pdate' => $request->date,
+            'ymd' => $request->days,
+            'free_option' => $request->input('free_option', null),
+            'ptime' => $ptime,
+            'tags' => $currentTag,
+        ];
+
+        $post = DB::transaction(function () use ($request, $opdId, $patientData) {
+            $existingPatient = $opdId !== '' ? pasient_details::where('opdId', $opdId)->first() : null;
+
+            if ($existingPatient) {
+                $patientData['sr'] = $request->input('serialnumber', $existingPatient->sr);
+                $patientData['opdId'] = $opdId;
+                $patientData['charges'] = $request->input('charges', $existingPatient->charges);
+                $patientData['chargesamount'] = $request->input('charge_amount', $existingPatient->chargesamount);
+                $patientData['free_option'] = $request->input('free_option', $existingPatient->free_option);
+                $patientData['tags'] = $request->input('tags', $existingPatient->tags ?? 'general');
+
+                $existingPatient->fill($patientData);
+                $existingPatient->save();
+
+                return $existingPatient;
+            }
+
+            $newOpdId = $this->nextDocumentNumber('opd');
             $serialNumber = $this->nextDocumentNumber('opd_serial');
-            $currentTag = Emergency::value('emergency') === 'yes' ? 'emergency' : 'general';
+            $patientData['sr'] = $serialNumber;
+            $patientData['opdId'] = $newOpdId;
 
-            return pasient_details::create([
-                'pesientname' => $request->patient_name,
-                'gender' => $request->gender,
-                'age' =>  $request->age,
-                'fatherhusband' => $request->relation . ' ' . $request->father_husband_name,
-                'mobileno' =>  $request->mobile_no,
-                'address' =>  $request->address,
-                'area' =>  $request->area,
-                'caste' =>  $request->caste,
-                'desease' =>  $request->disease,
-                'mlc_pmlc' =>  $request->mlc_pmlc,
-                'charges' =>  $request->charges,
-                'chargesamount' =>  $request->charge_amount,
-                'sr' => $serialNumber,
-                'opdId' => $opdId,
-                'pdate' => $request->date,
-                'ymd' => $request->days,
-                'free_option' => $request->free_option,
-                'ptime' => $ptime,
-                'tags' => $currentTag,
-            ]);
+            return pasient_details::create($patientData);
         });
-
 
         if ($post) {
             return response()->json([
-                'msg' => 'Data Submit Successfully',
+                'msg' => $opdId !== '' ? 'Data Update Successfully' : 'Data Submit Successfully',
                 'status' => true,
                 'data' => [
                     'serialnumber' => $post->sr,
@@ -57,9 +76,28 @@ class PasientController extends Controller
                     'time' => $post->ptime,
                 ],
             ]);
-        } else {
-            return response()->json(["msg" => 'Something Went Worng! Please try again', 'status' => 'true']);
         }
+
+        return response()->json(["msg" => 'Something Went Worng! Please try again', 'status' => 'true']);
+    }
+
+    private function normalizeTimeValue(?string $timeValue): ?string
+    {
+        if (empty($timeValue)) {
+            return null;
+        }
+
+        $timeValue = trim($timeValue);
+
+        foreach (['H:i:s', 'h:i:s A', 'H:i', 'h:i A'] as $format) {
+            try {
+                return \Carbon\Carbon::createFromFormat($format, $timeValue)->format('H:i:s');
+            } catch (\Exception $e) {
+                // keep trying supported formats
+            }
+        }
+
+        return $timeValue;
     }
 
     private function nextDocumentNumber(string $name): int

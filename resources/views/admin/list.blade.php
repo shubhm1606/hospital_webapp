@@ -19,38 +19,59 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
 
     <section class="section dashboard">
-        <div class="container">
+        <div class="container-fluid px-3 px-md-4">
 
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="date"><strong>Date Filter:</strong></label>
-                    <input type="date" id="date" class="form-control">
+            <div class="card shadow-sm border-0 mb-4 overflow-hidden">
+                <div class="card-header bg-primary text-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <h5 class="mb-0 fw-semibold">Patient Record Filter</h5>
+                        <span class="badge bg-light text-primary">OPD List</span>
+                    </div>
                 </div>
-                <div class="col-md-4 d-flex align-items-end">
-                    <button id="filterBtn" class="btn btn-primary me-2">Filter</button>
-                    <button id="resetBtn" class="btn btn-secondary">Reset</button>
-                </div>
-                <div class="col-md-4 d-flex align-items-end justify-content-end">
-                    <button onclick="exportFunction()" class="btn btn-info">Export</button>
+                <div class="card-body p-3 p-md-4">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-5">
+                            <label for="date" class="form-label fw-semibold text-dark mb-2">Select Date</label>
+                            <input type="date" id="date" class="form-control form-control-lg shadow-sm border-0 bg-light">
+                        </div>
+                        <div class="col-md-3 d-flex gap-2">
+                            <button id="filterBtn" class="btn btn-primary btn-lg flex-fill">
+                                <i class="bi bi-funnel me-1"></i>Filter
+                            </button>
+                            <button id="resetBtn" class="btn btn-outline-secondary btn-lg">
+                                Reset
+                            </button>
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-md-end">
+                            <button onclick="exportFunction()" class="btn btn-success btn-lg px-4 shadow-sm">
+                                <i class="bi bi-download me-1"></i>Export
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover text-center" id="filter_records">
-                    <thead class="table-light">
-                        <tr>
-                            <th>#</th>
-                            <th>OPDID</th>
-                            <th>Name</th>
-                            <th>Father/Husband</th>
-                            <th>Mobile</th>
-                            <th>Medical</th>
-                            <th>Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                </table>
-                <iframe id="pdfFrame" style="display:none;"></iframe>
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle mb-0" id="filter_records">
+                            <thead class="table-primary text-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>OPDID</th>
+                                    <th>Name</th>
+                                    <th>Father/Husband</th>
+                                    <th>Mobile</th>
+                                    <th>Medical</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <iframe id="pdfFrame" style="display:none;"></iframe>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -59,6 +80,128 @@
 
 <!-- Meta CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
+
+<style>
+    #filter_records {
+        width: 100% !important;
+        table-layout: fixed;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    #filter_records thead,
+    #filter_records tbody,
+    #filter_records tr,
+    #filter_records th,
+    #filter_records td {
+        display: table-row-group;
+    }
+
+    #filter_records thead tr,
+    #filter_records tbody tr {
+        display: table-row;
+    }
+
+    #filter_records thead th,
+    #filter_records tbody td {
+        display: table-cell;
+    }
+
+    #filter_records thead th {
+        font-size: 0.90rem;
+        letter-spacing: 0.02em;
+        padding: 0.9rem 0.75rem;
+        white-space: nowrap;
+        text-align: center;
+        vertical-align: middle;
+        font-weight: 700;
+    }
+
+    #filter_records tbody td {
+        padding: 0.9rem 0.75rem;
+        vertical-align: middle;
+        font-size: 0.93rem;
+        text-align: center;
+        word-wrap: break-word;
+    }
+
+    #filter_records tbody td:first-child,
+    #filter_records thead th:first-child {
+        width: 60px;
+    }
+
+    #filter_records tbody td:nth-child(2),
+    #filter_records thead th:nth-child(2) {
+        width: 90px;
+    }
+
+    #filter_records tbody td:nth-child(3),
+    #filter_records thead th:nth-child(3) {
+        width: 180px;
+    }
+
+    #filter_records tbody td:nth-child(4),
+    #filter_records thead th:nth-child(4) {
+        width: 180px;
+    }
+
+    #filter_records tbody td:nth-child(5),
+    #filter_records thead th:nth-child(5) {
+        width: 120px;
+    }
+
+    #filter_records tbody td:nth-child(6),
+    #filter_records thead th:nth-child(6) {
+        width: 140px;
+    }
+
+    #filter_records tbody td:nth-child(7),
+    #filter_records thead th:nth-child(7) {
+        width: 110px;
+    }
+
+    #filter_records tbody td:nth-child(8),
+    #filter_records thead th:nth-child(8) {
+        width: 120px;
+    }
+
+    .dataTables_wrapper .dataTables_filter input,
+    .dataTables_wrapper .dataTables_length select {
+        border: 1px solid #dfe3ea;
+        border-radius: 10px;
+        padding: 0.5rem 0.75rem;
+        background: #fff;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+        background: linear-gradient(135deg, #0d6efd, #2563eb);
+        border: none;
+        color: #fff !important;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border-radius: 8px;
+        margin: 0 2px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #0d6efd, #2563eb);
+        border: none;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #198754, #157347);
+        border: none;
+    }
+
+    .btn-outline-secondary {
+        border-radius: 10px;
+    }
+</style>
 
 <!-- jQuery must load FIRST -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
