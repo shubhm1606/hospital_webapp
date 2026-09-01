@@ -159,10 +159,8 @@
                                     value="{{ old('mobile_no', $details['mobileno'] ?? '') }}"
                                     name="mobile_no"
                                     class="form-control"
-                                    pattern="[0-9]{10}"
-                                    maxlength="10"
                                     placeholder="Enter 10 digit mobile number"
-                                    required>
+                                    >
                                 <div id="mobile_no_error" class="text-danger" style="font-size: 12px;"></div>
                             </div>
 
@@ -278,9 +276,9 @@
                         </div>
 
                         <div class="text-center mt-4">
-                            <button type="button" id="newEntery" class="btn btn-warning">New Patient</button>
+                           <a href="{{ url('opd') }}" type="button" class="btn btn-warning">New Patient</a>
                             <button type="submit" class="btn btn-success" id="submitBtn">Save</button>
-                            <button type="button" class="btn btn-info" id="pdfButton">Print PDF</button>
+                            <button type="button" class="btn btn-info" id="pdfButton" disabled>Print PDF</button>
                             <iframe id="pdfFrame" style="display: none;"></iframe>
                         </div>
                     </div>

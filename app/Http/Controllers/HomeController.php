@@ -65,6 +65,30 @@ class HomeController extends Controller
         ->where('ipd_date', $date)
             ->count();
 
+        $generalmedicineCount = pasient_details::where('desease', 'General Medicine')
+        ->where('pdate', $date)
+            ->count();
+
+        $anccheckupCount = pasient_details::where('desease', 'ANC Checkup')
+        ->where('pdate', $date)
+            ->count();
+
+        $rtaaccidentCount = pasient_details::where('desease', 'RTA Accident')
+        ->where('pdate', $date)
+            ->count();  
+
+        $poisoningCount = pasient_details::where('desease', 'Poisoning')
+        ->where('pdate', $date)
+            ->count();
+
+        $orthopedicCount = pasient_details::where('desease', 'Orthopedic')
+        ->where('pdate', $date) 
+            ->count();
+
+        $antirabiesCount = pasient_details::where('desease', 'Anti Rabies')
+        ->where('pdate', $date) 
+            ->count();
+
         
         $opdAmounts = pasient_details::where('charges', 'PAID')
         ->where('pdate', $date)
@@ -82,7 +106,13 @@ class HomeController extends Controller
             'ipdpaidCount',
             'ipdfreeCount',
             'opdAmounts',
-            'ipdAmount'
+            'ipdAmount',
+            'generalmedicineCount',
+            'anccheckupCount',
+            'rtaaccidentCount',
+            'poisoningCount',
+            'orthopedicCount',
+            'antirabiesCount'
         ));
     }
 

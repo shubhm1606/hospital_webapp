@@ -3,7 +3,7 @@
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
-        <img src="http://localhost/laravel_setup/public/img/hospitalLogo.png" alt="">
+        <img src="{{ asset('public/img/hospitalLogo.png') }}" alt="">
         <span class="d-none d-lg-block">Hospital</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>

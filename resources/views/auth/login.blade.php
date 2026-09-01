@@ -102,7 +102,15 @@
                         </form>
 
                         <!-- Footer Note -->
-                        <div class="text-center mt-4">
+                        <!-- <div class="text-center mt-4">
+                            @if (Route::has('register'))
+                                <a class="text-decoration-none text-primary fw-medium" href="{{ route('register') }}">
+                                    Create a new account
+                                </a>
+                            @endif
+                        </div> -->
+
+                        <div class="text-center mt-2">
                             <small class="text-muted">
                                 <i class="fas fa-shield-alt text-success"></i>
                                 Secure Admin Access • Only authorized personnel

@@ -18,11 +18,14 @@ class IpdDetails extends Model
 
     protected $fillable = [
         'opdnumber',
+        'sr_no',
         'ipdno',
         'refered_dr',
         'wordno',
         'wordtype',
         'ipdamount',
         'ipdamount_type',
+        'ipd_date',
+        'ipd',
     ];
 }

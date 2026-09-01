@@ -43,7 +43,11 @@ class DoctorController extends Controller
             'is_active' => $request->is_active // 1 or 0
         ]);
         
-        return redirect()->back()->with('success', 'Doctor added successfully!');
+        return response()->json([
+            'status' => true,
+            'message' => 'Doctor added successfully!',
+            'data' => $data,
+        ]);
     }
 
 

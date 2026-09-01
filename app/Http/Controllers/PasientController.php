@@ -8,7 +8,7 @@ use App\Models\pasient_details;
 use App\Models\IpdDetails;
 use App\Models\Emergency;
 use Barryvdh\DomPDF\Facade\Pdf;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class PasientController extends Controller
 {
@@ -17,9 +17,12 @@ class PasientController extends Controller
     {
         // dd($request->all());
         $ptime = \Carbon\Carbon::createFromFormat('h:i:s A', $request->time)->format('H:i:s');
-        $post = pasient_details::updateOrCreate(
-            ['opdId' => $request->opd_id],
-            [
+        $post = DB::transaction(function () use ($request, $ptime) {
+            $opdId = $this->nextDocumentNumber('opd');
+            $serialNumber = $this->nextDocumentNumber('opd_serial');
+            $currentTag = Emergency::value('emergency') === 'yes' ? 'emergency' : 'general';
+
+            return pasient_details::create([
                 'pesientname' => $request->patient_name,
                 'gender' => $request->gender,
                 'age' =>  $request->age,
@@ -32,22 +35,54 @@ class PasientController extends Controller
                 'mlc_pmlc' =>  $request->mlc_pmlc,
                 'charges' =>  $request->charges,
                 'chargesamount' =>  $request->charge_amount,
-                'sr' => $request->serialnumber,
-                'opdId' => $request->opd_id,
+                'sr' => $serialNumber,
+                'opdId' => $opdId,
                 'pdate' => $request->date,
                 'ymd' => $request->days,
                 'free_option' => $request->free_option,
                 'ptime' => $ptime,
-                'tags' => $request->tags,
-            ]
-        );
+                'tags' => $currentTag,
+            ]);
+        });
 
 
         if ($post) {
-            return response()->json(["msg" => 'Data Submit Successfully', 'status' => 'true']);
+            return response()->json([
+                'msg' => 'Data Submit Successfully',
+                'status' => true,
+                'data' => [
+                    'serialnumber' => $post->sr,
+                    'opdnumber' => $post->opdId,
+                    'date' => $post->pdate,
+                    'time' => $post->ptime,
+                ],
+            ]);
         } else {
             return response()->json(["msg" => 'Something Went Worng! Please try again', 'status' => 'true']);
         }
+    }
+
+    private function nextDocumentNumber(string $name): int
+    {
+        $counter = DB::table('document_counters')->where('name', $name)->lockForUpdate()->first();
+
+        if (!$counter) {
+            DB::table('document_counters')->insert([
+                'name' => $name,
+                'current_value' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            $counter = DB::table('document_counters')->where('name', $name)->lockForUpdate()->first();
+        }
+
+        $nextValue = $counter->current_value + 1;
+        DB::table('document_counters')->where('name', $name)->update([
+            'current_value' => $nextValue,
+            'updated_at' => now(),
+        ]);
+
+        return $nextValue;
     }
 
     public function getOpdnumber()
@@ -207,27 +242,38 @@ class PasientController extends Controller
     public function ipddetailssubmit(Request $request)
     {
         // dd($request->all());
-        $ipddetailssave = new IpdDetails();
+        $ipddetailssave = DB::transaction(function () use ($request) {
+            $ipdNumber = $this->nextDocumentNumber('ipd');
+            $serialNumber = $this->nextDocumentNumber('ipd_serial');
 
-        date_default_timezone_set("Asia/Kolkata");
-        $date = date("Y-m-d");
-        $time = date("H:i:s");
+            date_default_timezone_set("Asia/Kolkata");
+            $date = date("Y-m-d");
+            $time = date("H:i:s");
 
-        // Assign request values to the model attributes
-        $ipddetailssave->sr_no = $request->sr_no;
-        $ipddetailssave->opdnumber = $request->opd_id;
-        $ipddetailssave->refered_dr = $request->refDr;
-        $ipddetailssave->wordno = $request->wardnumber;
-        $ipddetailssave->wordtype = $request->wardType;
-        $ipddetailssave->ipdamount = $request->chaegesAmount;
-        $ipddetailssave->ipdno = $request->ipdNumber;
-        $ipddetailssave->ipdamount_type = $request->charges;
-        $ipddetailssave->ipd_date = $date;
-        $ipddetailssave->ipd = $time;
+            return IpdDetails::create([
+                'sr_no' => $serialNumber,
+                'opdnumber' => $request->opd_id,
+                'refered_dr' => $request->refDr,
+                'wordno' => $request->wardnumber,
+                'wordtype' => $request->wardType,
+                'ipdamount' => $request->chaegesAmount,
+                'ipdno' => $ipdNumber,
+                'ipdamount_type' => $request->charges,
+                'ipd_date' => $date,
+                'ipd' => $time,
+            ]);
+        });
 
         // Save the data and return response
-        if ($ipddetailssave->save()) {
-            return response()->json(['status' => true, 'message' => 'IPD details saved successfully']);
+        if ($ipddetailssave) {
+            return response()->json([
+                'status' => true,
+                'message' => 'IPD details saved successfully',
+                'data' => [
+                    'serialnumber' => $ipddetailssave->sr_no,
+                    'ipdnumber' => $ipddetailssave->ipdno,
+                ],
+            ]);
         } else {
             return response()->json(['status' => false, 'message' => 'Failed to save IPD details']);
         }

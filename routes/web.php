@@ -18,11 +18,11 @@ Route::get('/', function () {
 Auth::routes();
 
 
-// User Dashboard
-Route::middleware(['auth', 'user'])->group(function () {});
+// Authenticated application routes
+Route::middleware(['auth'])->group(function () {
 
-// Admin Dashboard
-Route::middleware(['auth', 'admin'])->group(function () {
+    // Admin-only doctor management
+    Route::middleware(['admin'])->group(function () {
 
     Route::get('/doctor', [DoctorController::class, 'index'])->name('index.doctor');
     Route::get('/doctorylist', [DoctorController::class, 'doctorylist'])->name('doctorylist');
@@ -32,7 +32,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/doctor_update/{id}', [DoctorController::class, 'doctor_update'])->name('doctor.update');
     Route::post('/doctor_delete/{id}', [DoctorController::class, 'destroy'])->name('doctor.delete');
 
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    });
+
+    Route::middleware(['admin'])->group(function () {
+        Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    });
     Route::get('/check', [AdminController::class, 'check'])->name('admin.check');
     Route::get('/home', [HomeController::class, 'adminHome'])->name('home');
     Route::get('/review', [HomeController::class, 'review'])->name('review');

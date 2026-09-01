@@ -1,3 +1,23 @@
+// =============================================
+// DYNAMIC URL CONFIGURATION
+// =============================================
+// Change this base URL to match your environment
+const BASE_URL = window.location.origin + '/laravel_setup'; // For local development
+// For production, you might use: const BASE_URL = 'https://yourdomain.com/api';
+// Or detect dynamically: const BASE_URL = window.location.origin + '/your-project-folder';
+
+// API Endpoints
+const API_URLS = {
+    SUBMIT: BASE_URL + '/fromsubmit',
+    OPD_NUMBER: BASE_URL + '/Opdnumber',
+    EMERGENCY: BASE_URL + '/emergency',
+    PDF_DOWNLOAD: BASE_URL + '/pdfdownloade'
+};
+
+// =============================================
+// HELPER FUNCTIONS
+// =============================================
+
 // Helper function to safely set error messages
 function setErrorMessage(className, message, color = 'red') {
     const elements = document.getElementsByClassName(className);
@@ -24,20 +44,256 @@ function setElementValue(elementId, value) {
     }
 }
 
+// Helper function to get CSRF token
+function getCsrfToken() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]');
+    const headers = {};
+    if (csrfToken) {
+        headers["X-CSRF-TOKEN"] = csrfToken.getAttribute("content");
+    }
+    return headers;
+}
+
+// Helper function to handle API responses
+async function handleApiResponse(response) {
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+}
+
+// Helper function to show toast messages
+function showToast(type, message) {
+    if (typeof toastr !== 'undefined') {
+        const toastMethods = {
+            success: toastr.success,
+            error: toastr.error,
+            info: toastr.info,
+            warning: toastr.warning
+        };
+        const method = toastMethods[type] || toastr.info;
+        method(message);
+    } else {
+        console.log(`[${type.toUpperCase()}] ${message}`);
+    }
+}
+
+// =============================================
+// LOADER FUNCTIONS
+// =============================================
+
+function showLoader() {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        preloader.style.display = 'block';
+    }
+}
+
+function hideLoader() {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        preloader.style.display = 'none';
+    }
+}
+
+// =============================================
+// MAIN API FUNCTIONS
+// =============================================
+
+// Function to get OPD number
+async function getOpdnumber() {
+    showLoader();
+    try {
+        const response = await fetch(API_URLS.OPD_NUMBER, {
+            method: "GET",
+            headers: getCsrfToken()
+        });
+
+        const data = await handleApiResponse(response);
+
+        if (data.status) {
+            setElementValue('sr_no', data.data.serialnumber);
+            setElementValue('opd_id', data.data.opdnumber);
+            setElementValue('date', data.data.date);
+            setElementValue('time', data.data.time);
+            hideLoader();
+        } else {
+            showToast('error', "Error: " + data.message);
+            hideLoader();
+        }
+    } catch (error) {
+        console.error("Fetch Error:", error);
+        showToast('error', "Failed to fetch OPD number");
+        hideLoader();
+    }
+}
+
+// Function to get emergency status
+async function emergency() {
+    showLoader();
+    try {
+        const response = await fetch(API_URLS.EMERGENCY, {
+            method: "GET",
+            headers: getCsrfToken()
+        });
+
+        const data = await handleApiResponse(response);
+
+        if (data.status) {
+            hideLoader();
+            const emergencySelect = document.getElementById('emergency');
+            if (emergencySelect) {
+                emergencySelect.value = data.emergency;
+            }
+            return data.emergency;
+        } else {
+            showToast('error', "Error: " + data.message);
+            hideLoader();
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching emergency data:", error);
+        showToast('error', "Failed to fetch emergency status");
+        hideLoader();
+        return null;
+    }
+}
+
+// Function to test emergency status
+function tuster() {
+    fetch(API_URLS.EMERGENCY, {
+        method: "GET",
+        headers: getCsrfToken()
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status) {
+            if (data.emergency == 'no') {
+                showToast('info', "General Opd Working");
+            } else {
+                showToast('info', "Emergency Opd Working");
+            }
+        } else {
+            showToast('error', "Error: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        showToast('error', "Failed to check emergency status");
+    });
+}
+
+// Function to update charges
+function chagersupdate(chargeType) {
+    if (chargeType === 'PAID') {
+        let container = document.getElementById("freeoption");
+        if (container) {
+            container.innerHTML = "";
+        }
+        emergency().then(emergencyValue => {
+            console.log("Emergency Value:", emergencyValue);
+            if (emergencyValue == 'yes') {
+                setElementValue('charge_amount', '30.00');
+            } else {
+                setElementValue('charge_amount', '10.00');
+            }
+        });
+    } else if (chargeType === 'FREE') {
+        emergency().then(emergencyValue => {
+            console.log("Emergency Value:", emergencyValue);
+            setElementValue('charge_amount', '0');
+        });
+        
+        let container = document.getElementById("freeoption");
+        if (container) {
+            container.innerHTML = "";
+
+            let newSelect = document.createElement("select");
+            newSelect.name = "free_option";
+            newSelect.id = "free_option";
+            newSelect.className = "form-control";
+            
+            // Create options more efficiently
+            const freeOptions = [
+                { value: "ayushman_card", label: "Aayushman Card" },
+                { value: "delivery_case", label: "Delivery Case" },
+                { value: "staff", label: "Staff" },
+                { value: "108_ambulance", label: "108 Ambulance" },
+                { value: "pensionar", label: "PENSIONAR" },
+                { value: "anc_check-up", label: "ANC Check-up" },
+                { value: "mlc", label: "MLC" },
+                { value: "jsy_delivery_case", label: "JSY Delivery Case" },
+                { value: "ltt_case", label: "LTT Case" },
+                { value: "nrc_child", label: "NRC Child" },
+                { value: "old_age_home", label: "OLD AGE HOME" },
+                { value: "100_dial", label: "100 Dial" },
+                { value: "baby_checkup", label: "BABY CHECKUP" },
+                { value: "boys_girls_hostel", label: "BOYS & GIRLS HOSTEL" },
+                { value: "t.b._medicine", label: "T.B. MEDICINE" },
+                { value: "cardless_caseless", label: "CARDLESS / CASELESS" },
+                { value: "janani_express", label: "Janani Express" }
+            ];
+
+            freeOptions.forEach(option => {
+                newSelect.appendChild(new Option(option.label, option.value));
+            });
+
+            let label = document.createElement("label");
+            label.innerText = "Option:";
+            
+            let div = document.createElement("div");
+            div.className = "form-group";
+            div.appendChild(label);
+            div.appendChild(newSelect);
+
+            container.appendChild(div);
+            setElementValue('charge_amount', '0.00');
+        }
+    } else {
+        setElementValue('charge_amount', '');
+    }
+}
+
+// =============================================
+// MAIN DOCUMENT READY HANDLER
+// =============================================
+
 document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOM fully loaded and parsed");
+    console.log("BASE_URL:", BASE_URL);
+    console.log("API Endpoints:", API_URLS);
+    
     // Initialize functions
     getOpdnumber();
     tuster();
    
     // Disable PDF button initially
     const pdfButton = document.getElementById("pdfButton");
+    const submitForm = document.getElementById("submitdata");
+    let savedEntryReadyForPrint = false;
+    let formHasChanges = false;
     if (pdfButton) {
         pdfButton.disabled = true;
     }
 
-    // Form submission handler
-    const submitForm = document.getElementById("submitdata");
+    window.addEventListener('beforeunload', function (event) {
+        if (savedEntryReadyForPrint || formHasChanges) {
+            event.preventDefault();
+            event.returnValue = '';
+        }
+    });
+
+    if (submitForm) {
+        submitForm.addEventListener('input', function () {
+            formHasChanges = true;
+        });
+    }
+
+    // =============================================
+    // FORM SUBMISSION HANDLER
+    // =============================================
     console.log("submitForm:", submitForm);
+    
     if (submitForm) {
         console.log("Form submit event listener added.");
         submitForm.addEventListener("submit", function (e) {
@@ -111,52 +367,47 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (chargeAmount) formData.append("charge_amount", chargeAmount.value);
                 
                 if (emergency == 'yes') {
-                    formData.append("tags", 'emergency');
+                    formData.append("tags", "emergency");
                 } else {
-                    formData.append("tags", 'general');
+                    formData.append("tags", "general");
                 }
 
-                // Get CSRF token safely
-                const csrfToken = document.querySelector('meta[name="csrf-token"]');
-                const headers = {};
-                if (csrfToken) {
-                    headers["X-CSRF-TOKEN"] = csrfToken.getAttribute("content");
-                }
-
-                // Submit form data
-                fetch("http://localhost/laravel_setup/fromsubmit", {
+                // Submit form data using dynamic URL
+                fetch(API_URLS.SUBMIT, {
                     method: "POST",
-                    headers: headers,
+                    headers: getCsrfToken(),
                     body: formData,
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.status) {
-                        if (typeof toastr !== 'undefined') {
-                            toastr.success("Details submit Successfully");
-                        }
+                        showToast('success', "Details submit Successfully");
+                        submitForm.reset();
+                        document.querySelectorAll('.text-danger').forEach(error => error.textContent = '');
                         if (pdfButton) {
                             pdfButton.disabled = false;
                         }
+                        formHasChanges = false;
+                        savedEntryReadyForPrint = true;
+                        getOpdnumber();
                         hideLoader();
                     } else {
-                        if (typeof toastr !== 'undefined') {
-                            toastr.error("Error: " + data.message);
-                        }
+                        showToast('error', "Error: " + data.message);
+                        hideLoader();
                     }
                 })
                 .catch(error => {
                     console.error("Error:", error);
-                    if (typeof toastr !== 'undefined') {
-                        toastr.error("Submission failed. Please try again.");
-                    }
+                    showToast('error', "Submission failed. Please try again.");
                     hideLoader();
                 });
             }
         });
     }
 
-    // Charges dropdown change handler
+    // =============================================
+    // CHARGES DROPDOWN CHANGE HANDLER
+    // =============================================
     const chargesSelect = document.getElementById('charges');
     if (chargesSelect) {
         chargesSelect.addEventListener('change', function () {
@@ -164,37 +415,41 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // PDF Button click handler
+    // =============================================
+    // PDF BUTTON CLICK HANDLER
+    // =============================================
     const pdfButtonClick = document.getElementById('pdfButton');
     if (pdfButtonClick) {
         pdfButtonClick.addEventListener('click', function () {
             showLoader();
             var pdfFrame = document.getElementById('pdfFrame');
             if (pdfFrame) {
-                pdfFrame.src = "http://localhost/laravel_setup/pdfdownloade";
+                // Use dynamic URL for PDF download
+                pdfFrame.src = API_URLS.PDF_DOWNLOAD;
                 pdfFrame.onload = function () {
+                    pdfFrame.contentWindow.onafterprint = function () {
+                        formHasChanges = false;
+                        savedEntryReadyForPrint = false;
+                        
+                    };
                     pdfFrame.contentWindow.print();
-                    if (typeof toastr !== 'undefined') {
-                        toastr.success("Pdf Print Successfully");
-                    }
+                    showToast('success', "Pdf Print Successfully");
                     hideLoader();
                 };
                 pdfFrame.onerror = function () {
-                    if (typeof toastr !== 'undefined') {
-                        toastr.error("Failed to load PDF");
-                    }
+                    showToast('error', "Failed to load PDF");
                     hideLoader();
                 };
             } else {
                 hideLoader();
-                if (typeof toastr !== 'undefined') {
-                    toastr.error("PDF frame not found");
-                }
+                showToast('error', "PDF frame not found");
             }
         });
     }
 
-    // New Entry button handler
+    // =============================================
+    // NEW ENTRY BUTTON HANDLER
+    // =============================================
     const newEntryBtn = document.getElementById("newEntery");
     if (newEntryBtn) {
         newEntryBtn.addEventListener("click", function() {
@@ -203,202 +458,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// Function to get OPD number
-function getOpdnumber() {
-    showLoader();
-    fetch("http://localhost/laravel_setup/Opdnumber", {
-        method: "GET"
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status) {
-            setElementValue('sr_no', data.data.serialnumber);
-            setElementValue('opd_id', data.data.opdnumber);
-            setElementValue('date', data.data.date);
-            setElementValue('time', data.data.time);
-            hideLoader();
-        } else {
-            if (typeof toastr !== 'undefined') {
-                toastr.error("Error: " + data.message);
-            }
-            hideLoader();
-        }
-    })
-    .catch(error => {
-        console.error("Fetch Error:", error);
-        if (typeof toastr !== 'undefined') {
-            toastr.error("Failed to fetch OPD number");
-        }
-        hideLoader();
-    });
-}
-
-// Function to update charges
-function chagersupdate(chargeType) {
-    if (chargeType === 'PAID') {
-        let container = document.getElementById("freeoption");
-        if (container) {
-            container.innerHTML = "";
-        }
-        emergency().then(emergencyValue => {
-            console.log("Emergency Value:", emergencyValue);
-            if (emergencyValue == 'yes') {
-                setElementValue('charge_amount', '30.00');
-            } else {
-                setElementValue('charge_amount', '10.00');
-            }
-        });
-    } else if (chargeType === 'FREE') {
-        emergency().then(emergencyValue => {
-            console.log("Emergency Value:", emergencyValue);
-            setElementValue('charge_amount', '0');
-        });
-        
-        let container = document.getElementById("freeoption");
-        if (container) {
-            container.innerHTML = "";
-
-            let newSelect = document.createElement("select");
-            newSelect.name = "free_option";
-            newSelect.id = "free_option";
-            newSelect.className = "form-control";
-            
-            let option1 = new Option("Aayushman Card", "ayushman_card");
-            let option2 = new Option("Delivery Case", "delivery_case");
-            let option3 = new Option("Staff", "staff");
-            let option4 = new Option("108 Ambulance", "108_ambulance");
-            let option5 = new Option("PENSIONAR", "pensionar");
-            let option6 = new Option("ANC Check-up", "anc_check-up");
-            let option7 = new Option("MLC", "mlc");
-            let option8 = new Option("JSY Delivery Case", "jsy_delivery_case");
-            let option9 = new Option("LTT Case", "ltt_case");
-            let option10 = new Option("NRC Child", "nrc_child");
-            let option11 = new Option("OLD AGE HOME", "old_age_home");
-            let option12 = new Option("100 Dial", "100_dial");
-            let option13 = new Option("BABY CHECKUP", "baby_checkup");
-            let option14 = new Option("BOYS & GIRLS HOSTEL", "boys_girls_hostel");
-            let option15 = new Option("T.B. MEDICINE", "t.b._medicine");
-            let option16 = new Option("CARDLESS / CASELESS", "cardless_caseless");
-            let option17 = new Option("Janani Express", "janani_express");
-            let option18 = new Option("Staff", "staff");
-
-
-            newSelect.appendChild(option1);
-            newSelect.appendChild(option2);
-            newSelect.appendChild(option3);
-            newSelect.appendChild(option4);
-            newSelect.appendChild(option5);
-            newSelect.appendChild(option6);
-            newSelect.appendChild(option7);
-            newSelect.appendChild(option8);
-            newSelect.appendChild(option9);
-            newSelect.appendChild(option10);
-            newSelect.appendChild(option11);
-            newSelect.appendChild(option12);
-            newSelect.appendChild(option13);
-            newSelect.appendChild(option14);
-            newSelect.appendChild(option15);
-            newSelect.appendChild(option16);
-            newSelect.appendChild(option17);
-            newSelect.appendChild(option18);
-
-            let label = document.createElement("label");
-            label.innerText = "Option:";
-            
-            let div = document.createElement("div");
-            div.className = "form-group";
-            div.appendChild(label);
-            div.appendChild(newSelect);
-
-            container.appendChild(div);
-            setElementValue('charge_amount', '0.00');
-        }
-    } else {
-        setElementValue('charge_amount', '');
-    }
-}
-
-// Function to get emergency status
-async function emergency() {
-    showLoader();
-    try {
-        let response = await fetch("http://localhost/laravel_setup/emergency", {
-            method: "GET"
-        });
-
-        let data = await response.json();
-
-        if (data.status) {
-            hideLoader();
-            const emergencySelect = document.getElementById('emergency');
-            if (emergencySelect) {
-                emergencySelect.value = data.emergency;
-            }
-            return data.emergency;
-        } else {
-            if (typeof toastr !== 'undefined') {
-                toastr.error("Error: " + data.message);
-            }
-            hideLoader();
-            return null;
-        }
-    } catch (error) {
-        console.error("Error fetching emergency data:", error);
-        if (typeof toastr !== 'undefined') {
-            toastr.error("Failed to fetch emergency status");
-        }
-        hideLoader();
-        return null;
-    }
-}
-
-// Function to test emergency status
-function tuster() {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]');
-    const headers = {};
-    if (csrfToken) {
-        headers["X-CSRF-TOKEN"] = csrfToken.getAttribute("content");
-    }
-
-    fetch("http://localhost/laravel_setup/emergency", {
-        method: "GET",
-        headers: headers
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status) {
-            if (typeof toastr !== 'undefined') {
-                if (data.emergency == 'no') {
-                    toastr.info("General Opd Working");
-                } else {
-                    toastr.info("Emergency Opd Working");
-                }
-            }
-        } else {
-            if (typeof toastr !== 'undefined') {
-                toastr.error("Error: " + data.message);
-            }
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        if (typeof toastr !== 'undefined') {
-            toastr.error("Failed to check emergency status");
-        }
-    });
-}
-
-// Loader functions
-function showLoader() {
-    const preloader = document.getElementById('preloader');
-    if (preloader) {
-        preloader.style.display = 'block';
-    }
-}
-
-function hideLoader() {
-    const preloader = document.getElementById('preloader');
-    if (preloader) {
-        preloader.style.display = 'none';
-    }
-}
+// =============================================
+// EXPOSE FUNCTIONS FOR GLOBAL ACCESS (if needed)
+// =============================================
+window.setErrorMessage = setErrorMessage;
+window.getElementValue = getElementValue;
+window.setElementValue = setElementValue;
+window.getOpdnumber = getOpdnumber;
+window.chagersupdate = chagersupdate;
+window.emergency = emergency;
+window.tuster = tuster;
+window.showLoader = showLoader;
+window.hideLoader = hideLoader;
+window.BASE_URL = BASE_URL;
+window.API_URLS = API_URLS;
