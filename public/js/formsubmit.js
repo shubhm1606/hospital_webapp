@@ -62,6 +62,30 @@ async function handleApiResponse(response) {
     return await response.json();
 }
 
+function lockChargeSelectionForSavedRecord() {
+    const chargesSelect = document.getElementById('charges');
+    if (chargesSelect) {
+        chargesSelect.disabled = true;
+    }
+
+    const freeOptionSelect = document.getElementById('free_option');
+    if (freeOptionSelect) {
+        freeOptionSelect.disabled = true;
+    }
+}
+
+function unlockChargeSelectionForNewRecord() {
+    const chargesSelect = document.getElementById('charges');
+    if (chargesSelect) {
+        chargesSelect.disabled = false;
+    }
+
+    const freeOptionSelect = document.getElementById('free_option');
+    if (freeOptionSelect) {
+        freeOptionSelect.disabled = false;
+    }
+}
+
 // Helper function to show toast messages
 function showToast(type, message) {
     if (typeof toastr !== 'undefined') {
@@ -382,14 +406,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then(data => {
                     if (data.status) {
                         showToast('success', "Details submit Successfully");
-                        submitForm.reset();
                         document.querySelectorAll('.text-danger').forEach(error => error.textContent = '');
                         if (pdfButton) {
                             pdfButton.disabled = false;
                         }
+                        lockChargeSelectionForSavedRecord();
                         formHasChanges = false;
                         savedEntryReadyForPrint = true;
-                        getOpdnumber();
                         hideLoader();
                     } else {
                         showToast('error', "Error: " + data.message);
@@ -453,7 +476,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const newEntryBtn = document.getElementById("newEntery");
     if (newEntryBtn) {
         newEntryBtn.addEventListener("click", function() {
-            location.reload(); 
+            unlockChargeSelectionForNewRecord();
+            getOpdnumber();
+            formHasChanges = false;
+            savedEntryReadyForPrint = false;
+            const form = document.getElementById("submitdata");
+            if (form) {
+                form.reset();
+            }
         });
     }
 });

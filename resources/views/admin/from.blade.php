@@ -276,7 +276,7 @@
                         </div>
 
                         <div class="text-center mt-4">
-                           <a href="{{ url('opd') }}" type="button" class="btn btn-warning">New Patient</a>
+                           <a href="{{ url('opd') }}" id="newEntery" type="button" class="btn btn-warning">New Patient</a>
                             <button type="submit" class="btn btn-success" id="submitBtn">Save</button>
                             <button type="button" class="btn btn-info" id="pdfButton" disabled>Print PDF</button>
                             <iframe id="pdfFrame" style="display: none;"></iframe>
