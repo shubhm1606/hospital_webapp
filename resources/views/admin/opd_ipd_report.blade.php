@@ -6,9 +6,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Ek+Mukta" rel="stylesheet">
     <style>
+        @page {
+            size: A4 landscape;
+            margin: 8mm;
+        }
+
         * {
             margin: 0px;
             padding: 0px;
+            box-sizing: border-box;
         }
 
         body {
@@ -16,9 +22,8 @@
         }
 
         .container-fluid {
-            position: absolute;
-            width: 100%;
-            top: 0px;
+            width: auto;
+            padding: 0;
         }
 
         .pdf-header {
@@ -41,39 +46,47 @@
         #filter_records th,
         #filter_records td {
             border: 1px solid black;
-            padding: 8px;
-        }
-
-        .container-fluid {
-            padding: 12px;
-            /* Adds padding on left and right */
+            padding: 2px;
         }
 
         .table-container {
-            width: 97%;
+            width: 100%;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size: 7px;
             table-layout: fixed;
-            /* Ensures uniform column width */
         }
 
         th,
         td {
             border: 1px solid black;
-            padding: 8px;
-            /* text-align: center; */
-            /* word-wrap: break-word; */
+            padding: 2px;
+            text-align: center;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .table-container td {
+            width: auto !important;
+            font-size: 7px !important;
         }
 
         th:first-child,
         td:first-child {
-            padding: 20px;
-            width: 1200px;
+            padding: 2px;
+            width: 50px !important;
             white-space: nowrap;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tr {
+            page-break-inside: avoid;
         }
     </style>
 
